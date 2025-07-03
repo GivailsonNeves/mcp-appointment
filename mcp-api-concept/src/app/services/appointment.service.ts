@@ -126,12 +126,15 @@ export async function createAppointment(patientData: {
     throw new Error("Database not initialized");
   }
 
+  patientData.date = String(patientData.date);
+
+  const aleradyBooked = await wasAlreadyBooked(
+    patientData.doctorId,
+    patientData.date,
+    patientData.time
+  )
   if (
-    await wasAlreadyBooked(
-      patientData.doctorId,
-      patientData.date,
-      patientData.time
-    )
+   aleradyBooked 
   ) {
     throw new Error("This appointment slot is already booked");
   }
@@ -150,8 +153,8 @@ async function wasAlreadyBooked(
   date: string,
   time: string
 ): Promise<boolean> {
-  const appointments = await getAllAppointments();
-  return appointments.some(
+  const appointments = await getAllAppointmentsByDoctorId(doctorId, date);
+  return appointments?.length !== 0 && !!appointments?.some(
     (appointment) =>
       appointment.doctorId === doctorId &&
       appointment.date === date &&

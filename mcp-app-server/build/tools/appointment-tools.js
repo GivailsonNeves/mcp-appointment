@@ -39,7 +39,7 @@ function registerAppointmentsTool(server) {
         patientId: zod_1.z.string().describe("The ID of the patient"),
         doctorId: zod_1.z.string().describe("The ID of the doctor"),
         date: zod_1.z.string().describe("The date of the appointment (YYYY-MM-DD)"),
-        time: zod_1.z.array(zod_1.z.enum(["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"])).describe("The time of the appointment (HH:mm)"),
+        time: zod_1.z.string(zod_1.z.enum(["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"])).describe("The time of the appointment (HH:mm)"),
     }, async ({ patientId, doctorId, date, time }) => {
         const { data } = await api_client_1.apiClient.post("/appointments", {
             patientId,
