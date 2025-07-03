@@ -1,4 +1,4 @@
-import { getAllAppointmentsByDoctorId } from "@/app/services/appointment.service";
+import { getAllAppointmentsByDoctorId } from "@/api-services/appointment.service";
 import { NextRequest } from "next/server";
 
 export async function GET(

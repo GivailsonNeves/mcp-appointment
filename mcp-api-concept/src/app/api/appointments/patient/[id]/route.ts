@@ -1,6 +1,6 @@
 import {
   getAppointmentByPatientId
-} from "@/app/services/appointment.service";
+} from "@/api-services/appointment.service";
 import { NextRequest } from "next/server";
 
 export async function GET(

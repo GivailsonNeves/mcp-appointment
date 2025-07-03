@@ -1,6 +1,6 @@
-import { createAppointment, getAllAppointments, getAppointmentById, getAppointmentByPatientId } from "@/app/services/appointment.service";
-import { getDoctorById } from "@/app/services/doctor.service";
-import { getPatientById } from "@/app/services/patient.service";
+import { createAppointment, getAllAppointments, getAppointmentById, getAppointmentByPatientId } from "@/api-services/appointment.service";
+import { getDoctorById } from "@/api-services/doctor.service";
+import { getPatientById } from "@/api-services/patient.service";
 import { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {

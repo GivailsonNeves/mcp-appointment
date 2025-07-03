@@ -1,4 +1,4 @@
-import { createPatient, getAllPatients, getPatientById, getPatientByName } from "@/app/services/patient.service";
+import { createPatient, getAllPatients, getPatientById, getPatientByName } from "@/api-services/patient.service";
 import { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {

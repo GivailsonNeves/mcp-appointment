@@ -1,4 +1,4 @@
-import { db } from "@/app/lib/firebase";
+import { db } from "@/lib/firebase";
 
 const COLLECTION_NAME = "patients";
 type patientType = { id: string; name: string };

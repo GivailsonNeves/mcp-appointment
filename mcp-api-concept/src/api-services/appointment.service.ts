@@ -1,4 +1,4 @@
-import { db } from "@/app/lib/firebase";
+import { db } from "@/lib/firebase";
 import { getPatientById } from "./patient.service";
 import { getDoctorById } from "./doctor.service";
 

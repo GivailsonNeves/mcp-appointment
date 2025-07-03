@@ -1,3 +1,6 @@
+import { Button } from "@/components/ui/button";
+import { QueryProvider } from "@/providers/query-provider";
+import { MessageSquareMore } from "lucide-react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -25,9 +28,30 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-100`}
       >
-        {children}
+        <main className="p-5 ">
+          <QueryProvider>{children}</QueryProvider>
+        </main>
+        <footer
+          className="position-fixed bottom-0 left-0 right-0 bg-white shadow-md p-4"
+          style={{ zIndex: 1000, position: "fixed" }}
+        >
+          <div
+            className="text-center text-gray-500 text-sm"
+            style={{ position: "relative" }}
+          >
+            © {new Date().getFullYear()} My App. All rights reserved.
+            <div
+              className="position-absolute top-0  right-0"
+              style={{ position: "absolute", top: -6, right: 0 }}
+            >
+              <Button variant="outline" size="icon">
+                <MessageSquareMore />
+              </Button>
+            </div>
+          </div>
+        </footer>
       </body>
     </html>
   );
