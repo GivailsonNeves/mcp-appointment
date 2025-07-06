@@ -4,6 +4,9 @@ import { MessageSquareMore } from "lucide-react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { MainFooter } from "@/components/app/main-footer";
+import { MainMenu } from "@/components/app/main-menu";
+import { ModalProvider } from "@/providers/modal-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,28 +33,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-100`}
       >
+        <MainMenu />
         <main className="p-5 ">
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <ModalProvider>{children}</ModalProvider>
+          </QueryProvider>
         </main>
-        <footer
-          className="position-fixed bottom-0 left-0 right-0 bg-white shadow-md p-4"
-          style={{ zIndex: 1000, position: "fixed" }}
-        >
-          <div
-            className="text-center text-gray-500 text-sm"
-            style={{ position: "relative" }}
-          >
-            © {new Date().getFullYear()} My App. All rights reserved.
-            <div
-              className="position-absolute top-0  right-0"
-              style={{ position: "absolute", top: -6, right: 0 }}
-            >
-              <Button variant="outline" size="icon">
-                <MessageSquareMore />
-              </Button>
-            </div>
-          </div>
-        </footer>
+        <MainFooter />
       </body>
     </html>
   );

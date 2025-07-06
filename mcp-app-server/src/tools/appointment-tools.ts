@@ -61,7 +61,7 @@ export function registerAppointmentsTool(server: McpServer) {
           patientId,
           doctorId,
           date,
-          time,
+          time
         });
 
         return {
