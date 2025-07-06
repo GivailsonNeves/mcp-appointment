@@ -28,7 +28,7 @@ export const Selector = ({
 
   return (
     <Select value={doctor} onValueChange={onChange}>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-full">
         <SelectValue placeholder="Select a doctor" />
       </SelectTrigger>
       <SelectContent>

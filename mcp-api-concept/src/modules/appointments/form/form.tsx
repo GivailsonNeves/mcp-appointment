@@ -26,6 +26,9 @@ export function FormData({ onSubmit, onCancel, data, loading }: Props) {
   const form = useForm<FormType>({
     defaultValues: {
       time: data?.time || "",
+      date: data?.date ? new Date(data.date) : undefined,
+      doctorId: data?.doctorId || "",
+      patientId: data?.patientId || "",
     },
     resolver: zodResolver(formSchema),
   });

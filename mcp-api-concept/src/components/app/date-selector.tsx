@@ -1,4 +1,5 @@
 "use client";
+import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -6,7 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ChevronDownIcon } from "lucide-react";
+import { CalendarIcon, ChevronDownIcon } from "lucide-react";
 
 export const DateSelector = ({
   open,
@@ -26,9 +27,10 @@ export const DateSelector = ({
           <Button
             variant="outline"
             id="date"
-            className="w-48 justify-between font-normal border-0"
+            className="w-full font-normal border-0 rounded-md border-input"
           >
-            {date ? date.toLocaleDateString() : "Select date"}
+            <CalendarIcon className="mr-2 h-4 w-4" />
+            {date ? format(date, "yyyy-MM-dd") : "Select date"}
             <ChevronDownIcon />
           </Button>
         </PopoverTrigger>

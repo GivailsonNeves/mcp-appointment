@@ -9,6 +9,8 @@ import { useModal } from "@/providers/modal-provider";
 import { ModalForm } from "./modal-form";
 import { useMutation } from "@tanstack/react-query";
 import { addAppointment } from "@/services";
+import { ModalConfirm } from "@/components/app/modal-confirm";
+import { queryClient } from "@/providers/query-provider";
 
 export function Content() {
   const { showModal, hideModal, showLoading } = useModal();
@@ -26,15 +28,18 @@ export function Content() {
       });
     },
     onSuccess: () => {
-      console.log("Appointment created successfully");
+      alert("Appointment created successfully!");
     },
     onError: (error) => {
-      console.error("Error creating appointment:", error);
+      alert(`Error creating appointment: ${error.message}`);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["appointments"] });
     },
   });
 
   const handleSubmit = async (data: any) => {
-    console.log(data)
+    console.log(data);
     showLoading(true);
     await mutate(data);
     showLoading(false);
@@ -75,8 +80,21 @@ export function Content() {
       <List
         doctor={doctor}
         date={date}
-        onEdit={(data) => {}}
-        onDelete={(data) => {}}
+        onEdit={(data) => {
+          showModal(ModalForm, {
+            data,
+            onSubmit: handleSubmit,
+            onClose: hideModal,
+          });
+        }}
+        onDelete={(data) => {
+          showModal(ModalConfirm, {
+            title: "Confirmar Exclusão",
+            description:
+              "Você tem certeza que deseja excluir este agendamento?",
+            onClose: hideModal,
+          });
+        }}
       />
     </div>
   );

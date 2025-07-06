@@ -72,3 +72,31 @@ export async function createDoctor(doctorData: {name: string}) {
         throw new Error("Error creating doctor");
     }
 }
+
+export async function updateDoctor(doctorId: string, doctorData: {name: string}) {
+    if (!db) {
+        throw new Error("Database not initialized");
+    }
+    
+    try {
+        await db.collection(COLLECTION_NAME).doc(doctorId).update(doctorData);
+        return { id: doctorId, ...doctorData };
+    } catch (error) {
+        console.error("Error updating doctor:", error);
+        throw new Error("Error updating doctor");
+    }
+}
+
+export async function deleteDoctor(doctorId: string) {
+    if (!db) {
+        throw new Error("Database not initialized");
+    }
+    
+    try {
+        await db.collection(COLLECTION_NAME).doc(doctorId).delete();
+        return { id: doctorId };
+    } catch (error) {
+        console.error("Error deleting doctor:", error);
+        throw new Error("Error deleting doctor");
+    }
+}

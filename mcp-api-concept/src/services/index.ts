@@ -11,6 +11,16 @@ export const addPatient = async (data: Omit<PatientType, "id">) => {
     .post("/patients", data)
     .then((response) => response.data);
 };
+export const updatePatient = async ({id, ...rest}: PatientType) => {
+  return serviceClient
+    .put(`/patients/${id}`, rest)
+    .then((response) => response.data);
+};
+export const removePatient = async(id: string) => {
+  return serviceClient
+    .delete(`/patients/${id}`)
+    .then((response) => response.data);
+};
 export const addDoctor = async (data: Omit<DoctorType, "id">) => {
   return serviceClient.post("/doctors", data).then((response) => response.data);
 };

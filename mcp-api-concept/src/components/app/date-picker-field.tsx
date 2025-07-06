@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import { ControllerRenderProps, FieldValues } from "react-hook-form";
 import React from "react";
+import { cn } from "@/lib/utils";
 
 type DatePickerFieldProps<T extends FieldValues> = {
   control: any;
@@ -45,13 +46,14 @@ export function DatePickerField<T extends FieldValues>({
               <FormControl>
                 <Button
                   variant={"outline"}
-                  className={
-                    field.value ? "text-black" : "text-muted-foreground"
-                  }
+                  className={cn(
+                    field.value ? "text-black" : "text-muted-foreground",
+                    "rounded-md w-full border-input flex items-center justify-start font-normal",
+                  )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {field.value
-                    ? format(field.value, "dd/MM/yyyy")
+                    ? format(field.value, "yyyy-MM-dd")
                     : placeholder}
                 </Button>
               </FormControl>
@@ -61,8 +63,8 @@ export function DatePickerField<T extends FieldValues>({
                 mode="single"
                 selected={field.value}
                 onSelect={(e) => {
-                    setOpen(false);
-                    field.onChange(e);
+                  setOpen(false);
+                  field.onChange(e);
                 }}
                 initialFocus
               />

@@ -27,7 +27,9 @@ export function ModalForm({ onSubmit, onClose, data }: Props) {
           <DialogDescription>
             {data ? (
               <>
-                Atualize os campos do agendamento <strong>{data.id}</strong>
+                Atualize os campos do agendamento <strong>{
+                  //@ts-ignore
+                (data).patient.name}</strong>
               </>
             ) : (
               "Preencha os campos do agendamento"

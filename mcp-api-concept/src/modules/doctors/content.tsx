@@ -7,6 +7,7 @@ import { SectionTitle } from "@/ui/section-title";
 import { useMutation } from "@tanstack/react-query";
 import { List } from "./list";
 import { ModalForm } from "./modal-form";
+import { ModalConfirm } from "@/components/app/modal-confirm";
 
 export function Content() {
   const { showModal, hideModal, showLoading } = useModal();
@@ -20,6 +21,9 @@ export function Content() {
     onError: (error: any) => {
       alert(`Erro ao salvar doutor: ${error.message}`);
     },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["doctors"] });
+    }
   });
 
   const handleSubmit = async (data: any) => {
@@ -45,7 +49,16 @@ export function Content() {
           Adicionar Doutor
         </Button>
       </SectionTitle>
-      <List onEdit={(data) => {}} onDelete={(data) => {}} />
+      <List
+        onEdit={(data) => {}}
+        onDelete={(data) => {
+          showModal(ModalConfirm, {
+            title: "Confirmar Exclusão",
+            description: "Você tem certeza que deseja excluir este doutor?",
+            onClose: hideModal,
+          });
+        }}
+      />
     </div>
   );
 }
