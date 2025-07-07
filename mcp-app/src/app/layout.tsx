@@ -1,12 +1,11 @@
-import { Button } from "@/components/ui/button";
 import { QueryProvider } from "@/providers/query-provider";
-import { MessageSquareMore } from "lucide-react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { MainFooter } from "@/components/app/main-footer";
 import { MainMenu } from "@/components/app/main-menu";
 import { ModalProvider } from "@/providers/modal-provider";
+import { ChatProviderProvider } from "@/providers/chat-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,10 +35,14 @@ export default function RootLayout({
         <MainMenu />
         <main className="p-5 ">
           <QueryProvider>
-            <ModalProvider>{children}</ModalProvider>
+            <ModalProvider>
+              <ChatProviderProvider>
+                {children}
+                <MainFooter />
+              </ChatProviderProvider>
+            </ModalProvider>
           </QueryProvider>
         </main>
-        <MainFooter />
       </body>
     </html>
   );
