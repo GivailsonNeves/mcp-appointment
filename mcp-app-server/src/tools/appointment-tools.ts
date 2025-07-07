@@ -64,13 +64,26 @@ export function registerAppointmentsTool(server: McpServer) {
           time
         });
 
-        return {
-          content: [
-            {
+        const content: any[] = [{
+          type: "text",
+          text: JSON.stringify(data, null, 2),
+        }];
+
+        if (date) {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          const [year, month, day] = date.split("-").map(Number);
+          const inputDate = new Date(year, month - 1, day);
+          if (inputDate < today) {
+            content.unshift({
               type: "text",
-              text: JSON.stringify(data, null, 2),
-            },
-          ],
+              text: "Aviso: A data especificada está no passado. Esses agendamentos não podem mais ser marcados.",
+            });
+          }
+        }
+
+        return {
+          content,
         };
       }
     );
@@ -85,14 +98,26 @@ export function registerAppointmentsTool(server: McpServer) {
         const { data } = await apiClient.get(
           `appointments/doctor/${doctorId}/available-times/${date}`
         );
+        const content: any[] = [{
+          type: "text",
+          text: JSON.stringify(data, null, 2),
+        }];
+
+        if (date) {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          const [year, month, day] = date.split("-").map(Number);
+          const inputDate = new Date(year, month - 1, day);
+          if (inputDate < today) {
+            content.unshift({
+              type: "text",
+              text: "Aviso: A data especificada está no passado. Esses agendamentos não podem mais ser marcados.",
+            });
+          }
+        }
 
         return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(data, null, 2),
-            },
-          ],
+          content,
         };
       }
     );

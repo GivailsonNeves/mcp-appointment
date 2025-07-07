@@ -36,8 +36,14 @@ export function FormData({ onSubmit, onCancel, data, loading }: Props) {
   return (
     <Form {...form}>
       <form
-      // @ts-ignore
-        onSubmit={form.handleSubmit((d) => onSubmit({ ...d, id: data?.id, date: d.date?.toISOString().split("T")[0] }))}
+        // @ts-expect-error - date is being converted to string before submit
+        onSubmit={form.handleSubmit((d) =>
+          onSubmit({
+            ...d,
+            id: data?.id,
+            date: d.date?.toISOString().split("T")[0],
+          })
+        )}
       >
         <div className="grid grid-cols-2 pb-4 gap-4">
           <div className="col">
@@ -48,25 +54,58 @@ export function FormData({ onSubmit, onCancel, data, loading }: Props) {
             />
           </div>
           <div className="col">
-            <DoctorSelector
-              doctor={form.watch("doctorId")}
-              onChange={(value) => form.setValue("doctorId", value)}
+            <FormField
+              control={form.control}
+              name="doctorId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <DoctorSelector
+                      doctor={form.watch("doctorId")}
+                      onChange={(value) => form.setValue("doctorId", value)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
         </div>
         <div className="grid grid-cols-2 pb-4 gap-4">
           <div className="col">
-            <PatientSelector
-              patient={form.watch("patientId")}
-              onChange={(value) => form.setValue("patientId", value)}
+            <FormField
+              control={form.control}
+              name="patientId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <PatientSelector
+                      patient={form.watch("patientId")}
+                      onChange={(value) => form.setValue("patientId", value)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
           <div className="col">
-            <TimeSelector
-              time={form.watch("time")}
-              doctorId={form.watch("doctorId")}
-              date={form.watch("date")?.toISOString().split("T")[0]}
-              onChange={(value) => form.setValue("time", value)}
+            <FormField
+              control={form.control}
+              name="time"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <TimeSelector
+                      time={form.watch("time")}
+                      doctorId={form.watch("doctorId")}
+                      date={form.watch("date")?.toISOString().split("T")[0]}
+                      onChange={(value) => form.setValue("time", value)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
         </div>
