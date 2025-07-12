@@ -12,7 +12,7 @@ export class ChatController {
       }
 
       const response = await this.mcpClient.processQuery(query, history);
-      res.json({ response });
+      res.json(response);
     } catch (error) {
       console.error("Error processing query:", error);
       res.status(500).json({ error: "Failed to process query" });

@@ -1,7 +1,6 @@
 // Anthropic SDK
 import { Anthropic } from "@anthropic-ai/sdk";
 import {
-  ContentBlock,
   MessageParam,
   Tool,
   ToolUseBlock,
@@ -10,6 +9,17 @@ import {
 // MCP Client
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+
+enum MessageRole {
+  User = "user",
+  Assistant = "assistant",
+}
+
+enum ContentType {
+  Text = "text",
+  ToolUse = "tool_use",
+  ToolResult = "tool_result",
+}
 
 export class MCPClient {
   private mcp: Client;
@@ -20,7 +30,7 @@ export class MCPClient {
   private readonly llmsModel: string = "claude-sonnet-4-20250514";
   private readonly systemMessage: MessageParam[] = [
     {
-      role: "assistant",
+      role: MessageRole.Assistant,
       content: `You are a helpful assistant that can call tools to answer questions. Available tools: ${this.tools
         .map((tool) => tool.name)
         .join(", ")},
@@ -86,24 +96,19 @@ export class MCPClient {
   }
 
   async processQuery(query: string, history: MessageParam[] = []) {
-    let conversation: MessageParam[] = [];
+    let conversation: MessageParam[] = [
+      {
+        role: MessageRole.User,
+        content: query,
+      },
+    ];
+
     if (history && history.length > 0) {
       console.log("Using provided history for conversation:", history);
       conversation = [
         ...history,
-        {
-          role: "user",
-          content: query,
-        },
+        ...conversation,
       ] as MessageParam[];
-    } else {
-      console.log("No history provided, starting new conversation.");
-      conversation = [
-        {
-          role: "user",
-          content: query,
-        },
-      ];
     }
 
     while (true) {
@@ -112,16 +117,16 @@ export class MCPClient {
         conversation = [
           ...conversation,
           {
-            role: "assistant",
+            role: MessageRole.Assistant,
             content: messages.content,
           },
         ] as MessageParam[];
 
         let toolResults = [];
         for (const content of messages.content) {
-          if (content.type === "text") {
+          if (content.type === ContentType.Text) {
             console.log("LLM Response:", content.text);
-          } else if (content.type === "tool_use") {
+          } else if (content.type === ContentType.ToolUse) {
             toolResults.push(await this.runTool(content as ToolUseBlock));
           }
         }
@@ -135,7 +140,7 @@ export class MCPClient {
         conversation = [
           ...conversation,
           {
-            role: "user",
+            role: MessageRole.User,
             content: toolResults,
           },
         ] as MessageParam[];
@@ -162,7 +167,7 @@ export class MCPClient {
     });
     console.log("Tool Result:", result.content);
     return {
-      type: "tool_result",
+      type: ContentType.ToolResult,
       tool_use_id: content.id,
       content: result.content,
     };

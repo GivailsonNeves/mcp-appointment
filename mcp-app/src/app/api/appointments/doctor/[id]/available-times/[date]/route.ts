@@ -18,7 +18,6 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string, date: string }> }
 ) {
-  const { searchParams } = new URL(req.url);
   const id = (await params).id;
   const date = (await params).date;
 

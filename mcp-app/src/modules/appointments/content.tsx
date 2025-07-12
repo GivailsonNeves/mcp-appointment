@@ -1,22 +1,27 @@
 "use client";
 import { DateSelector } from "@/components/app/date-selector";
+import { ModalConfirm } from "@/components/app/modal-confirm";
 import { Button } from "@/components/ui/button";
+import { useNavigation } from "@/hooks/useNavigation";
+import { useModal } from "@/providers/modal-provider";
+import { queryClient } from "@/providers/query-provider";
+import { addAppointment } from "@/services";
 import { SectionTitle } from "@/ui/section-title";
+import { useMutation } from "@tanstack/react-query";
 import React from "react";
 import { Selector as DoctorSelector } from "../doctors/selector";
 import { List } from "./list";
-import { useModal } from "@/providers/modal-provider";
 import { ModalForm } from "./modal-form";
-import { useMutation } from "@tanstack/react-query";
-import { addAppointment } from "@/services";
-import { ModalConfirm } from "@/components/app/modal-confirm";
-import { queryClient } from "@/providers/query-provider";
 
-export function Content() {
+type Props = {
+  doctor?: string;
+  date?: Date;
+};
+
+export function Content({ doctor, date }: Props) {
+  const { showAppointments } = useNavigation();
   const { showModal, hideModal, showLoading } = useModal();
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
-  const [doctor, setDoctor] = React.useState<string | undefined>(undefined);
 
   const { mutate } = useMutation({
     mutationFn: async (data: any) => {
@@ -39,11 +44,26 @@ export function Content() {
   });
 
   const handleSubmit = async (data: any) => {
-    console.log(data);
     showLoading(true);
     await mutate(data);
     showLoading(false);
     hideModal();
+  };
+
+  const handleDateChange = (newDate: Date) => {
+    setOpen(false);
+    showAppointments({
+      doctor,
+      date: newDate,
+    });
+  };
+
+  const handleDoctorChange = (newDoctor: string) => {
+    setOpen(false);
+    showAppointments({
+      doctor: newDoctor,
+      date,
+    });
   };
 
   return (
@@ -53,13 +73,13 @@ export function Content() {
           <div>
             <DateSelector
               date={date}
-              onChange={setDate}
+              onChange={(date) => date && handleDateChange(date)}
               onOpenChange={setOpen}
               open={open}
             />
           </div>
           <div>
-            <DoctorSelector doctor={doctor} onChange={setDoctor} />
+            <DoctorSelector doctor={doctor} onChange={handleDoctorChange} />
           </div>
           <div>
             <Button
