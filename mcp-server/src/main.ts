@@ -3,6 +3,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { registerDoctorsTool } from "./tools/doctors-tool";
 import { registerPatientTool } from "./tools/patient-tool";
 import { registerAppointmentsTool } from "./tools/appointment-tools";
+import { registerUtilsTools } from "./tools/utils-tools";
 
 async function main() {
   const server = new McpServer({
@@ -17,6 +18,7 @@ async function main() {
   registerDoctorsTool(server);
   registerPatientTool(server);
   registerAppointmentsTool(server);
+  registerUtilsTools(server);
   // Configurando e iniciando o servidor
   const transport = new StdioServerTransport();
   await server.connect(transport);

@@ -14,7 +14,8 @@ async function main() {
     throw new Error("ANTHROPIC_API_KEY is not set");
   }
 
-  if (process.argv.length < 3 || !process.env.MCP_SERVER_PATH) {
+  console.log(process.env.MCP_SERVER_PATH);
+  if (process.argv.length < 3 && !process.env.MCP_SERVER_PATH) {
     console.log("Usage: node index.ts <path_to_server_script>");
     return;
   }
@@ -30,6 +31,7 @@ async function main() {
 
   try {
     await mcpClient.connectToServer(
+      //@ts-ignore
       process.argv[2] ||
         process.env.MCP_SERVER_PATH
     );

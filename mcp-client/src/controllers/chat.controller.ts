@@ -5,13 +5,13 @@ export class ChatController {
   constructor(private mcpClient: MCPClient) {}
   handler: RequestHandler = async (req, res) => {
     try {
-      const { query } = req.body;
+      const { query, history } = req.body;
       if (!query) {
         res.status(400).json({ error: "Query is required" });
         return;
       }
 
-      const response = await this.mcpClient.processQuery(query);
+      const response = await this.mcpClient.processQuery(query, history);
       res.json({ response });
     } catch (error) {
       console.error("Error processing query:", error);
