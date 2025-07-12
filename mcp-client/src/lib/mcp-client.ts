@@ -1,19 +1,45 @@
 // Anthropic SDK
 import { Anthropic } from "@anthropic-ai/sdk";
-import { MessageParam, Tool } from "@anthropic-ai/sdk/resources";
+import {
+  ContentBlock,
+  MessageParam,
+  Tool,
+  ToolUseBlock,
+} from "@anthropic-ai/sdk/resources";
 
 // MCP Client
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
-
-const llmsModel = "claude-sonnet-4-20250514";
-// const llmsModel = 'claude-3-5-sonnet-20241022';
 
 export class MCPClient {
   private mcp: Client;
   private llm: Anthropic;
   private transport: StdioClientTransport | null = null;
   public tools: Tool[] = [];
+
+  private readonly llmsModel: string = "claude-sonnet-4-20250514";
+  private readonly systemMessage: MessageParam[] = [
+    {
+      role: "assistant",
+      content: `You are a helpful assistant that can call tools to answer questions. Available tools: ${this.tools
+        .map((tool) => tool.name)
+        .join(", ")},
+        Your purpose is to assist users by providing accurate and helpful information based on the tools available.
+        If you need to use a tool, you will respond with a tool_use message containing the tool name and the arguments to pass to the tool.
+        Your final answer should be a json object with the following structure:
+        {
+          "llm_response": "your final answer",
+          "success": true/false,
+          "tool_name": "name of the last tool used",
+          "tool_params": {
+            "param1": "value1",
+            "param2": "value2",
+            ...
+          }
+        }
+        `,
+    },
+  ];
 
   constructor(apiKey: string) {
     this.llm = new Anthropic({
@@ -60,7 +86,7 @@ export class MCPClient {
   }
 
   async processQuery(query: string, history: MessageParam[] = []) {
-    let conversation: MessageParam[] = []
+    let conversation: MessageParam[] = [];
     if (history && history.length > 0) {
       console.log("Using provided history for conversation:", history);
       conversation = [
@@ -73,15 +99,6 @@ export class MCPClient {
     } else {
       console.log("No history provided, starting new conversation.");
       conversation = [
-        {
-          role: "assistant",
-          content: `You are a helpful assistant that can call tools to answer questions. Available tools: ${this.tools
-            .map((tool) => tool.name)
-            .join(", ")},
-              Your purpose is to assist users by providing accurate and helpful information based on the tools available.
-              If you need to use a tool, you will respond with a tool_use message containing the tool name and the arguments to pass to the tool.
-              `,
-        },
         {
           role: "user",
           content: query,
@@ -105,45 +122,25 @@ export class MCPClient {
           if (content.type === "text") {
             console.log("LLM Response:", content.text);
           } else if (content.type === "tool_use") {
-            console.log("Tool Use Detected:", content);
-            const toolName = content.name;
-            const toolArgs = content.input as
-              | { [x: string]: unknown }
-              | undefined;
-
-            console.log("Calling tool:", toolName, "with args:", toolArgs);
-            const result = await this.mcp.callTool({
-              name: toolName,
-              arguments: toolArgs,
-            });
-            console.log("Tool Result:", result.content);
-            toolResults.push({
-              toolUseId: content.id,
-              content: result.content,
-            });
+            toolResults.push(await this.runTool(content as ToolUseBlock));
           }
         }
-        
+
         if (!toolResults.length) {
           // If no tool results, break the loop
           console.log("No tool results, breaking the loop.");
           break;
         }
-        
+
         conversation = [
           ...conversation,
           {
             role: "user",
-            content: toolResults.map((result) => ({
-              type: "tool_result",
-              tool_use_id: result.toolUseId,
-              content: result.content,
-            })),
+            content: toolResults,
           },
         ] as MessageParam[];
 
         console.log("Updated conversation:", conversation);
-
       } catch (error) {
         console.error("Error during inference:", error);
         throw error;
@@ -153,13 +150,31 @@ export class MCPClient {
     return conversation;
   }
 
+  async runTool(content: ToolUseBlock) {
+    console.log("Tool Use Detected:", content);
+    const toolName = content.name;
+    const toolArgs = content.input as { [x: string]: unknown } | undefined;
+
+    console.log("Calling tool:", toolName, "with args:", toolArgs);
+    const result = await this.mcp.callTool({
+      name: toolName,
+      arguments: toolArgs,
+    });
+    console.log("Tool Result:", result.content);
+    return {
+      type: "tool_result",
+      tool_use_id: content.id,
+      content: result.content,
+    };
+  }
+
   async runInference(conversation: MessageParam[]) {
     try {
       const response: Anthropic.Messages.Message =
         await this.llm.messages.create({
-          model: llmsModel,
+          model: this.llmsModel,
           max_tokens: 1000,
-          messages: conversation,
+          messages: [...this.systemMessage, ...conversation],
           tools: this.tools,
         });
 
