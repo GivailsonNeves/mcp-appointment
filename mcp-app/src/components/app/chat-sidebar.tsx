@@ -13,6 +13,14 @@ import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { SendHorizonal, X } from "lucide-react";
 import React from "react";
+import { Spinner } from "../ui/spinner";
+
+const DEFAULT_MESSAGES = [
+  {
+    role: "assistant",
+    content: "Hello! How can I assist you today?",
+  },
+];
 
 type Props = {
   open: boolean;
@@ -47,6 +55,12 @@ export function ChatSidebar({
     onSubmitQuery?.(query);
   };
 
+  const messages = React.useMemo(() => {
+    return conversation?.length
+      ? [...DEFAULT_MESSAGES, ...conversation]
+      : DEFAULT_MESSAGES;
+  }, [conversation]);
+
   return (
     <SidebarProvider
       open={open}
@@ -74,7 +88,7 @@ export function ChatSidebar({
         <SidebarContent>
           <div className="flex flex-col gap-4 h-full">
             <div className="flex-grow-1 flex items-end justify-end p-4 flex-col rounded-md overflow-y-auto">
-              {conversation?.map((c, index) => (
+              {messages.map((c, index) => (
                 <div
                   key={index}
                   className={cn("w-full flex justify-end px-5", {
@@ -98,6 +112,7 @@ export function ChatSidebar({
               <div className="flex flex-col gap-4">
                 <div className="flex items-center space-x-2">
                   <Switch
+                    disabled={isPending}
                     id="interactive-mode"
                     checked={interactiveMode}
                     onCheckedChange={setInteractiveMode}
@@ -106,18 +121,32 @@ export function ChatSidebar({
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <Input ref={inputRef} placeholder="Command..." disabled={isPending} onKeyDown={
-                    (e) => {
+                  <Input
+                    ref={inputRef}
+                    placeholder={
+                      isPending ? "Processing..." : "Type your message..."
+                    }
+                    disabled={isPending}
+                    onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         e.preventDefault();
                         handSubmit();
                       }
-                    }
-                  } />
-                  <div>
-                    <Button variant="outline" size="icon" onClick={handSubmit} disabled={isPending} isLoading={isPending}>
-                      <SendHorizonal />
-                    </Button>
+                    }}
+                  />
+                  <div className="flex items-center w-[40px] justify-center">
+                    {isPending ? (
+                      <Spinner className="text-blue-500" />
+                    ) : (
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={handSubmit}
+                        disabled={isPending}
+                      >
+                        <SendHorizonal />
+                      </Button>
+                    )}
                   </div>
                 </div>
               </div>

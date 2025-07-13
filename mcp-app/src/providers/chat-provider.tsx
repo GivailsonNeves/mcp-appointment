@@ -36,34 +36,39 @@ export const ChatProviderProvider = ({ children }: { children: ReactNode }) => {
     onSuccess: (data: MessageParam[]) => {
       if (data.length && data.at(-1)) {
         const lastMessage: any = data.at(-1);
-        const llmsAnswer = lastMessage.content?.[0].text
-          ? JSON.parse(lastMessage.content[0].text)
-          : {};
+        try {
+          const llmsAnswer = lastMessage.content?.[0].text
+            ? JSON.parse(lastMessage.content[0].text)
+            : {};
 
-        setConversation((prev) => [
-          ...prev,
-          {
-            role: "assistant",
-            content: llmsAnswer.llm_response,
-          },
-        ]);
+          setConversation((prev) => [
+            ...prev,
+            {
+              role: "assistant",
+              content: llmsAnswer.llm_response,
+            },
+          ]);
 
-        if (interactiveMode) {
-          
-          // console.log({
-          //   success: llmsAnswer.success,
-          //   tool_name: llmsAnswer.tool_name,
-          //   tool_params: llmsAnswer.tool_params,
-          // });
-          if (llmsAnswer.success && llmsAnswer.tool_name) {
-            processInteraction(llmsAnswer.tool_name, llmsAnswer.tool_params);
-          } else {
-            console.error(
-              llmsAnswer.success,
-              "No interactions available for:",
-              llmsAnswer.tool_name
-            );
+          if (interactiveMode) {
+            if (llmsAnswer.success && llmsAnswer?.tool_name) {
+              processInteraction(llmsAnswer.tool_name, llmsAnswer.tool_params);
+            } else {
+              console.log(
+                llmsAnswer.success,
+                "No interactions available for:",
+                llmsAnswer?.tool_name || "Unknown tool"
+              );
+            }
           }
+        } catch (error) {
+          console.log("Error parsing LLM response:", error);
+          setConversation((prev) => [
+            ...prev,
+            {
+              role: "assistant",
+              content: lastMessage.content.text,
+            },
+          ]);
         }
       }
       setHistory(data || []);

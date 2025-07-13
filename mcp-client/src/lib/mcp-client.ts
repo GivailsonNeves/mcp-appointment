@@ -36,9 +36,9 @@ export class MCPClient {
         .join(", ")},
         Your purpose is to assist users by providing accurate and helpful information based on the tools available.
         If you need to use a tool, you will respond with a tool_use message containing the tool name and the arguments to pass to the tool.
-        Your final answer should be a json object with the following structure:
+        Your answers and questions to the user will always be a json object with the following structure:
         {
-          "llm_response": "your final answer",
+          "llm_response": "your response to the user",
           "success": true/false,
           "tool_name": "name of the last tool used",
           "tool_params": {
@@ -47,6 +47,7 @@ export class MCPClient {
             ...
           }
         }
+        If there is no last tool used, you can omit the "tool_name" and "tool_params" fields.
         `,
     },
   ];

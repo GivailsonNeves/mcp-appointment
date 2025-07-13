@@ -1,7 +1,11 @@
-const Spinner = () => {
+import { cn } from "@/lib/utils";
+
+const Spinner = ({className}: {className?: string}) => {
     return (
       <svg
-        className="animate-spin -ml-4 h-5 w-5 text-white"
+        className={
+          cn("animate-spin -ml-4 h-5 w-5 text-white", className)
+        }
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
@@ -23,4 +27,4 @@ const Spinner = () => {
     );
 }
 
-export { Spinner }
+export { Spinner };

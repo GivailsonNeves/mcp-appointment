@@ -8,7 +8,7 @@ const useColumns = (props: TableActionsProps<any>) => {
       id: "doctor name",
       header: "Doctor",
       accessorKey: "doctor.name",
-    },  
+    },
     {
       id: "patient name",
       header: "Patient",
@@ -25,10 +25,29 @@ const useColumns = (props: TableActionsProps<any>) => {
       accessorKey: "time",
     },
     {
+      id: "assistant",
+      header: "Criado por IA",
+      accessorKey: "assistant",
+      cell: ({ getValue }) => {
+        const value = getValue() as boolean;
+        return value ? "Sim" : "Não";
+      },
+    },
+    {
       id: "actions",
       header: "",
       cell: (data) => {
-        return <TableActions data={data.row.original} {...props} />;
+        return (
+          <TableActions data={data.row.original} {...props}>
+            {/* {data.row.original.assistant && <Button
+              variant="secondary"
+              size="icon"
+              onClick={() => {}}
+            >
+              <CheckIcon />
+            </Button>} */}
+          </TableActions>
+        );
       },
     },
   ] as ColumnDef<any, unknown>[];

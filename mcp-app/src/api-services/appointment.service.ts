@@ -13,44 +13,62 @@ export async function getAppointmentById(appointmentId: string) {
     if (!doc.exists) {
       return null;
     }
-    return fillAppointmentData({ id: doc.id, ...doc.data() } as AppointmentType);
+    return fillAppointmentData({
+      id: doc.id,
+      ...doc.data(),
+    } as AppointmentType);
   } catch (error) {
     console.error("Error fetching appointment by ID:", error);
     throw new Error("Error fetching appointment by ID");
   }
 }
 
-export async function getAppointmentByPatientId(patientId: string, date?: string) {
-    if (!db) {
-        throw new Error("Database not initialized");
-    }
-    try {
-        const query = db.collection(COLLECTION_NAME).where("patientId", "==", patientId);
-        if (date) {
-            query.where("date", "==", date);
-        }
-        const snapshot = await query.get();
-        if (snapshot.empty) {
-            return null;
-        }
-        let appointments = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Array<AppointmentType>;
-        if (date) {
-            appointments = appointments.filter(a => a.date === date);
-        }
-        const filledAppointments = await Promise.all(appointments.map(a => fillAppointmentData(a)));
-        return filledAppointments;
-    } catch (error) {
-        console.error("Error fetching appointment by patient ID:", error);
-        throw new Error("Error fetching appointment by patient ID");
-    }
-}
-
-export async function getAllAppointmentsByDoctorId(doctorId: string, date?: string) {
+export async function getAppointmentByPatientId(
+  patientId: string,
+  date?: string
+) {
   if (!db) {
     throw new Error("Database not initialized");
   }
   try {
-    const query = db.collection(COLLECTION_NAME).where("doctorId", "==", doctorId);
+    const query = db
+      .collection(COLLECTION_NAME)
+      .where("patientId", "==", patientId);
+    if (date) {
+      query.where("date", "==", date);
+    }
+    const snapshot = await query.get();
+    if (snapshot.empty) {
+      return null;
+    }
+    let appointments = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Array<AppointmentType>;
+    if (date) {
+      appointments = appointments.filter((a) => a.date === date);
+    }
+    const filledAppointments = await Promise.all(
+      appointments.map((a) => fillAppointmentData(a))
+    );
+    return filledAppointments;
+  } catch (error) {
+    console.error("Error fetching appointment by patient ID:", error);
+    throw new Error("Error fetching appointment by patient ID");
+  }
+}
+
+export async function getAllAppointmentsByDoctorId(
+  doctorId: string,
+  date?: string
+) {
+  if (!db) {
+    throw new Error("Database not initialized");
+  }
+  try {
+    const query = db
+      .collection(COLLECTION_NAME)
+      .where("doctorId", "==", doctorId);
     const snapshot = await query.get();
     if (snapshot.empty) {
       return null;
@@ -74,7 +92,6 @@ export async function getAllAppointmentsByDoctorId(doctorId: string, date?: stri
   }
 }
 
-
 type AppointmentType = {
   id: string;
   patientId: string;
@@ -84,7 +101,9 @@ type AppointmentType = {
   patient?: { name: string; id: string };
   doctor?: { name: string; id: string };
 };
-export async function getAllAppointments(date?: string): Promise<Array<AppointmentType>> {
+export async function getAllAppointments(
+  date?: string
+): Promise<Array<AppointmentType>> {
   if (!db) {
     throw new Error("Database not initialized");
   }
@@ -108,7 +127,6 @@ export async function getAllAppointments(date?: string): Promise<Array<Appointme
       appointments.map((a) => fillAppointmentData(a))
     );
     return filledAppointments;
-
   } catch (error) {
     console.error("Error fetching appointments:", error);
     throw new Error("Error fetching appointments");
@@ -121,6 +139,7 @@ export async function createAppointment(patientData: {
   date: string;
   time: string;
   doctorId: string;
+  assistant?: boolean;
 }) {
   if (!db) {
     throw new Error("Database not initialized");
@@ -132,15 +151,15 @@ export async function createAppointment(patientData: {
     patientData.doctorId,
     patientData.date,
     patientData.time
-  )
-  if (
-   aleradyBooked 
-  ) {
+  );
+  if (aleradyBooked) {
     throw new Error("This appointment slot is already booked");
   }
 
   try {
-    const res = await db.collection(COLLECTION_NAME).add(patientData);
+    const res = await db
+      .collection(COLLECTION_NAME)
+      .add({ ...patientData, assistant: !!patientData.assistant });
     return { id: res.id, ...patientData };
   } catch (error) {
     console.error("Error creating appointment:", error);
@@ -154,11 +173,14 @@ async function wasAlreadyBooked(
   time: string
 ): Promise<boolean> {
   const appointments = await getAllAppointmentsByDoctorId(doctorId, date);
-  return appointments?.length !== 0 && !!appointments?.some(
-    (appointment) =>
-      appointment.doctorId === doctorId &&
-      appointment.date === date &&
-      appointment.time === time
+  return (
+    appointments?.length !== 0 &&
+    !!appointments?.some(
+      (appointment) =>
+        appointment.doctorId === doctorId &&
+        appointment.date === date &&
+        appointment.time === time
+    )
   );
 }
 

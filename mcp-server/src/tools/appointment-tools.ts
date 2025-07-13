@@ -61,7 +61,8 @@ export function registerAppointmentsTool(server: McpServer) {
           patientId,
           doctorId,
           date,
-          time
+          time,
+          assistant: true,
         });
 
         const content: any[] = [{
