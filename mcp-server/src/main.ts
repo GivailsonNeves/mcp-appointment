@@ -4,6 +4,7 @@ import { registerDoctorsTool } from "./tools/doctors-tool";
 import { registerPatientTool } from "./tools/patient-tool";
 import { registerAppointmentsTool } from "./tools/appointment-tools";
 import { registerUtilsTools } from "./tools/utils-tools";
+import { registerAllResources } from "./resources/index.js";
 
 async function main() {
   const server = new McpServer({
@@ -19,6 +20,9 @@ async function main() {
   registerPatientTool(server);
   registerAppointmentsTool(server);
   registerUtilsTools(server);
+  
+  // Register MCP resources
+  registerAllResources(server);
   // Configurando e iniciando o servidor
   const transport = new StdioServerTransport();
   await server.connect(transport);

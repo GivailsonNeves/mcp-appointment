@@ -9,6 +9,7 @@ The MCP Server implements the Model Context Protocol standard to provide:
 - **Patient Management Tools**: Retrieve patient data and appointments
 - **Appointment Tools**: Create, list, and manage appointments
 - **Utility Tools**: Date/time functions and availability checking
+- **MCP Resources**: Structured data resources for templates, profiles, and histories
 
 ## Tech Stack
 
@@ -169,6 +170,116 @@ Get the current date and time in São Paulo timezone.
 
 **Returns:** Current date, time, and timezone information
 
+## MCP Resources
+
+The server provides structured data resources that can be accessed by MCP clients:
+
+### Appointment Templates
+Pre-configured appointment type templates with duration, requirements, and time slot information.
+
+**Available Templates:**
+- `appointment-templates://consultation` - General medical consultation (30 min)
+- `appointment-templates://checkup` - Annual health checkup (45 min)
+- `appointment-templates://followup` - Follow-up appointment (20 min)
+- `appointment-templates://emergency` - Emergency consultation (15 min)
+
+**Template Structure:**
+```json
+{
+  "type": "consultation",
+  "duration": 30,
+  "description": "General medical consultation",
+  "requirements": ["patient_id", "doctor_id", "date", "time"],
+  "defaultNotes": "General consultation appointment",
+  "category": "routine",
+  "allowedTimeSlots": ["09:00", "09:30", ...]
+}
+```
+
+### Doctor Profiles
+Comprehensive doctor information including schedules, specialties, and statistics.
+
+**Available Resources:**
+- `doctor-profiles://all` - All doctor profiles
+- `doctor-profiles://{doctor_id}` - Individual doctor profile
+
+**Profile Structure:**
+```json
+{
+  "id": 1,
+  "name": "Dr. Smith",
+  "email": "doctor@example.com",
+  "specialty": "General Practice",
+  "schedule": {
+    "monday": "9:00-17:00",
+    "tuesday": "9:00-17:00",
+    ...
+  },
+  "consultationTypes": ["consultation", "checkup"],
+  "acceptsEmergencies": false,
+  "statistics": {
+    "totalAppointments": 150,
+    "upcomingAppointments": 12
+  }
+}
+```
+
+### Patient History
+Complete appointment history and statistics for patients.
+
+**Available Resources:**
+- `patient-history://all` - All patient histories
+- `patient-history://{patient_id}` - Individual patient history
+
+**History Structure:**
+```json
+{
+  "patient": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com"
+  },
+  "totalAppointments": 5,
+  "appointments": [...],
+  "summary": {
+    "firstAppointment": "2024-01-01",
+    "lastAppointment": "2024-03-01",
+    "frequentDoctors": [...],
+    "averageInterval": 45
+  }
+}
+```
+
+### Schedule Templates
+Pre-configured schedule patterns for different practice types.
+
+**Available Templates:**
+- `schedule-templates://standard-weekday` - Monday-Friday 9AM-5PM (40h/week)
+- `schedule-templates://extended-hours` - Extended weekdays + Saturday morning (54h/week)
+- `schedule-templates://part-time` - 3 days per week (24h/week)
+- `schedule-templates://emergency` - 24/7 emergency coverage (168h/week)
+- `schedule-templates://specialist` - Specialist consultations with longer slots (28h/week)
+
+**Template Structure:**
+```json
+{
+  "name": "Standard Weekday Schedule",
+  "type": "weekday",
+  "description": "Standard Monday to Friday office hours",
+  "schedule": {
+    "monday": {
+      "start": "09:00",
+      "end": "17:00",
+      "lunchBreak": {"start": "12:00", "end": "13:00"},
+      "slots": ["09:00", "09:30", ...]
+    },
+    ...
+  },
+  "totalWeeklyHours": 40,
+  "maxDailyAppointments": 16
+}
+```
+
 ## API Integration
 
 The MCP server communicates with the appointment system via HTTP calls to:
@@ -232,6 +343,10 @@ src/
 │   ├── patient-tool.ts      # Patient management tools
 │   ├── appointment-tools.ts # Appointment operations
 │   └── utils-tools.ts       # Utility functions
+├── resources/
+│   └── index.ts             # MCP resources handler
+├── lib/
+│   └── api-client.ts        # HTTP client for API calls
 └── types/               # TypeScript type definitions
 ```
 
