@@ -113,10 +113,8 @@ Retrieve patient information by ID or name.
 }
 ```
 
-#### `get-pantient-appointments` ⚠️
+#### `get-patient-appointments` ⚠️
 Get all appointments for a specific patient.
-
-**Note:** There's a typo in the tool name - it should be "get-patient-appointments"
 
 **Parameters:**
 - `patientId` (required): Patient ID string

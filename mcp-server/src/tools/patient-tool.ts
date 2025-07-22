@@ -33,8 +33,8 @@ export function registerPatientTool(server: McpServer) {
     );
 
     server.tool(
-        "get-pantient-appointments",
-        "Retrieve all appointments for a specific pantient",
+        "get-patient-appointments",
+        "Retrieve all appointments for a specific patient",
         {
           patientId: z.string().describe("The ID of the patient to retrieve appointments for"),
           date: z
