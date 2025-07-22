@@ -1,0 +1,120 @@
+{
+  "titulo": "Operações CRUD - Sistema de Consultas MCP",
+  "descricao": "Guia completo das operações de Criar, Ler, Atualizar e Excluir disponíveis",
+  "secoes": {
+    "medicos": {
+      "operacoes_disponiveis": [
+        {
+          "ferramenta": "get-doctor",
+          "descricao": "Buscar médico específico por ID ou nome",
+          "parametros": ["id", "name"],
+          "exemplo": { "name": "Dr. Silva" }
+        },
+        {
+          "ferramenta": "list-doctors", 
+          "descricao": "Listar médicos com paginação e filtros",
+          "parametros": ["page", "limit", "specialty", "search"],
+          "exemplo": { "specialty": "cardiologia", "limit": 10 }
+        },
+        {
+          "ferramenta": "update-doctor",
+          "descricao": "Atualizar informações de médico existente",
+          "parametros": ["id", "name", "email", "phone", "specialty", "experience"],
+          "exemplo": { "id": "1", "specialty": "Cardiologia" }
+        },
+        {
+          "ferramenta": "get-doctor-appointments",
+          "descricao": "Buscar consultas de um médico específico",
+          "parametros": ["doctorId", "date"],
+          "exemplo": { "doctorId": "1", "date": "2024-12-25" }
+        }
+      ]
+    },
+    "pacientes": {
+      "operacoes_disponiveis": [
+        {
+          "ferramenta": "get-patient",
+          "descricao": "Buscar paciente específico por ID ou nome", 
+          "parametros": ["id", "name"],
+          "exemplo": { "name": "João Silva" }
+        },
+        {
+          "ferramenta": "list-patients",
+          "descricao": "Listar pacientes com paginação e filtros",
+          "parametros": ["page", "limit", "search", "ageRange"],
+          "exemplo": { "ageRange": "25-65", "limit": 20 }
+        },
+        {
+          "ferramenta": "update-patient",
+          "descricao": "Atualizar informações de paciente existente",
+          "parametros": ["id", "name", "email", "phone", "birthDate", "address"],
+          "exemplo": { "id": "1", "phone": "+55 11 99999-9999" }
+        },
+        {
+          "ferramenta": "get-patient-appointments",
+          "descricao": "Buscar consultas de um paciente específico",
+          "parametros": ["patientId", "date"],
+          "exemplo": { "patientId": "1" }
+        }
+      ]
+    },
+    "consultas": {
+      "operacoes_disponiveis": [
+        {
+          "ferramenta": "get-appointment",
+          "descricao": "Buscar consulta específica por ID",
+          "parametros": ["id"],
+          "exemplo": { "id": "123" }
+        },
+        {
+          "ferramenta": "list-appointments",
+          "descricao": "Listar consultas com filtros de data",
+          "parametros": ["date"],
+          "exemplo": { "date": "2024-12-25" }
+        },
+        {
+          "ferramenta": "create-appointment",
+          "descricao": "Criar nova consulta com validação de conflitos",
+          "parametros": ["patientId", "doctorId", "date", "time"],
+          "exemplo": { "patientId": "1", "doctorId": "2", "date": "2024-12-25", "time": "14:00" }
+        },
+        {
+          "ferramenta": "update-appointment",
+          "descricao": "Atualizar consulta existente com validações",
+          "parametros": ["id", "patientId", "doctorId", "date", "time", "notes", "status"],
+          "exemplo": { "id": "123", "time": "15:00", "status": "confirmed" }
+        },
+        {
+          "ferramenta": "delete-appointment",
+          "descricao": "Cancelar ou excluir consulta com validação de tempo",
+          "parametros": ["id", "reason", "softDelete"],
+          "exemplo": { "id": "123", "reason": "Paciente solicitou cancelamento", "softDelete": true }
+        },
+        {
+          "ferramenta": "list-doctor-available-times",
+          "descricao": "Verificar horários disponíveis de um médico",
+          "parametros": ["doctorId", "date"],
+          "exemplo": { "doctorId": "1", "date": "2024-12-25" }
+        }
+      ]
+    },
+    "utilitarios": {
+      "operacoes_disponiveis": [
+        {
+          "ferramenta": "get-date",
+          "descricao": "Obter data e hora atual no fuso de São Paulo",
+          "parametros": [],
+          "exemplo": {}
+        }
+      ]
+    }
+  },
+  "melhores_praticas": [
+    "Sempre use paginação ao listar grandes volumes de dados",
+    "Verifique disponibilidade antes de criar/atualizar consultas",
+    "Use soft delete (cancelamento) em vez de exclusão permanente",
+    "Valide datas para evitar agendamentos no passado",
+    "Use filtros de busca para encontrar registros específicos",
+    "Mantenha cancelamentos com pelo menos 2 horas de antecedência"
+  ]
+}

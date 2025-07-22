@@ -1,0 +1,39 @@
+{
+  "consultation": {
+    "tipo": "consulta",
+    "duracao": 30,
+    "descricao": "Consulta médica geral",
+    "requisitos": ["id_paciente", "id_medico", "data", "horario"],
+    "observacoes_padrao": "Consulta médica geral",
+    "categoria": "rotina",
+    "horarios_disponiveis": ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"]
+  },
+  "checkup": {
+    "tipo": "checkup",
+    "duracao": 45,
+    "descricao": "Exame médico de rotina anual",
+    "requisitos": ["id_paciente", "id_medico", "data", "horario"],
+    "observacoes_padrao": "Checkup anual - exame médico abrangente",
+    "categoria": "preventivo",
+    "horarios_disponiveis": ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00"]
+  },
+  "followup": {
+    "tipo": "retorno",
+    "duracao": 20,
+    "descricao": "Consulta de retorno para consulta anterior",
+    "requisitos": ["id_paciente", "id_medico", "data", "horario", "id_consulta_anterior"],
+    "observacoes_padrao": "Consulta de retorno",
+    "categoria": "seguimento",
+    "horarios_disponiveis": ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"]
+  },
+  "emergency": {
+    "tipo": "emergencia",
+    "duracao": 15,
+    "descricao": "Consulta de emergência",
+    "requisitos": ["id_paciente", "id_medico", "nivel_urgencia"],
+    "observacoes_padrao": "Consulta de emergência - atendimento urgente necessário",
+    "categoria": "emergencia",
+    "horarios_disponiveis": "qualquer",
+    "prioridade": "alta"
+  }
+}

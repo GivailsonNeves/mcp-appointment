@@ -95,6 +95,55 @@ Get all appointments for a specific doctor.
 }
 ```
 
+#### `list-doctors`
+Lista todos os médicos com opções de paginação e filtros.
+
+**Parameters:**
+- `page` (optional): Número da página (começa em 1)
+- `limit` (optional): Quantidade de médicos por página (máximo 50)
+- `specialty` (optional): Filtrar por especialidade
+- `search` (optional): Buscar por nome ou email
+
+**Usage:**
+```json
+{
+  "name": "list-doctors",
+  "arguments": {
+    "page": 1,
+    "limit": 20,
+    "specialty": "cardiologia"
+  }
+}
+```
+
+#### `update-doctor`
+Atualizar informações de um médico existente.
+
+**Parameters:**
+- `id` (required): ID do médico a ser atualizado
+- `name` (optional): Novo nome do médico
+- `email` (optional): Novo email do médico
+- `phone` (optional): Novo telefone do médico
+- `specialty` (optional): Nova especialidade
+- `experience` (optional): Experiência profissional
+- `qualifications` (optional): Lista de qualificações
+- `languages` (optional): Idiomas falados
+- `acceptsEmergencies` (optional): Aceita emergências
+- `officeLocation` (optional): Localização do consultório
+- `address` (optional): Endereço completo
+
+**Usage:**
+```json
+{
+  "name": "update-doctor",
+  "arguments": {
+    "id": "1",
+    "specialty": "Cardiologia",
+    "phone": "+55 11 99999-9999"
+  }
+}
+```
+
 ### Patient Management
 
 #### `get-patient`
@@ -120,6 +169,55 @@ Get all appointments for a specific patient.
 **Parameters:**
 - `patientId` (required): Patient ID string
 - `date` (optional): Date filter in YYYY-MM-DD format
+
+#### `list-patients`
+Lista todos os pacientes com opções de paginação e filtros.
+
+**Parameters:**
+- `page` (optional): Número da página (começa em 1)
+- `limit` (optional): Quantidade de pacientes por página (máximo 50)
+- `search` (optional): Buscar por nome, email ou telefone
+- `ageRange` (optional): Filtrar por faixa etária (ex: '18-65')
+
+**Usage:**
+```json
+{
+  "name": "list-patients",
+  "arguments": {
+    "page": 1,
+    "limit": 20,
+    "ageRange": "25-65"
+  }
+}
+```
+
+#### `update-patient`
+Atualizar informações de um paciente existente.
+
+**Parameters:**
+- `id` (required): ID do paciente a ser atualizado
+- `name` (optional): Novo nome do paciente
+- `email` (optional): Novo email do paciente
+- `phone` (optional): Novo telefone do paciente
+- `birthDate` (optional): Nova data de nascimento (YYYY-MM-DD)
+- `address` (optional): Novo endereço completo
+- `emergencyContact` (optional): Contato de emergência
+- `emergencyPhone` (optional): Telefone do contato de emergência
+- `allergies` (optional): Lista de alergias
+- `medications` (optional): Medicações em uso
+- `medicalHistory` (optional): Histórico médico relevante
+
+**Usage:**
+```json
+{
+  "name": "update-patient",
+  "arguments": {
+    "id": "1",
+    "phone": "+55 11 99999-9999",
+    "address": "Nova rua, 123"
+  }
+}
+```
 
 ### Appointment Management
 
@@ -167,6 +265,58 @@ Get available time slots for a doctor on a specific date.
 Get the current date and time in São Paulo timezone.
 
 **Parameters:** None
+
+**Returns:** Current date, time, and timezone information
+
+#### `update-appointment`
+Atualizar uma consulta existente com validações de conflito.
+
+**Parameters:**
+- `id` (required): ID da consulta a ser atualizada
+- `patientId` (optional): Novo ID do paciente
+- `doctorId` (optional): Novo ID do médico
+- `date` (optional): Nova data da consulta (YYYY-MM-DD)
+- `time` (optional): Novo horário da consulta
+- `notes` (optional): Notas adicionais sobre a consulta
+- `status` (optional): Status da consulta (scheduled, confirmed, cancelled, completed)
+
+**Usage:**
+```json
+{
+  "name": "update-appointment",
+  "arguments": {
+    "id": "123",
+    "time": "15:00",
+    "status": "confirmed"
+  }
+}
+```
+
+#### `delete-appointment`
+Cancelar/excluir uma consulta com validação apropriada.
+
+**Parameters:**
+- `id` (required): ID da consulta a ser cancelada
+- `reason` (optional): Motivo do cancelamento
+- `softDelete` (optional): Se true, apenas marca como cancelada. Se false, exclui permanentemente
+
+**Features:**
+- Validação de antecedência mínima de 2 horas
+- Soft delete por padrão (marca como cancelada)
+- Hard delete para exclusão permanente
+- Registro do motivo do cancelamento
+
+**Usage:**
+```json
+{
+  "name": "delete-appointment",
+  "arguments": {
+    "id": "123",
+    "reason": "Paciente solicitou cancelamento",
+    "softDelete": true
+  }
+}
+```
 
 **Returns:** Current date, time, and timezone information
 
@@ -277,6 +427,75 @@ Pre-configured schedule patterns for different practice types.
   },
   "totalWeeklyHours": 40,
   "maxDailyAppointments": 16
+}
+```
+
+### CRUD Operations Guide
+Guia completo de todas as operações CRUD disponíveis.
+
+**Available Resource:**
+- `crud-operations://guide` - Guia completo com exemplos e melhores práticas
+
+**Guide Structure:**
+```json
+{
+  "sections": {
+    "doctors": {
+      "available_operations": [
+        "get-doctor", "list-doctors", "update-doctor", "get-doctor-appointments"
+      ]
+    },
+    "patients": {
+      "available_operations": [
+        "get-patient", "list-patients", "update-patient", "get-patient-appointments"
+      ]
+    },
+    "appointments": {
+      "available_operations": [
+        "get-appointment", "list-appointments", "create-appointment",
+        "update-appointment", "delete-appointment", "list-doctor-available-times"
+      ]
+    }
+  },
+  "best_practices": [
+    "Sempre use paginação ao listar grandes volumes de dados",
+    "Verifique disponibilidade antes de criar/atualizar consultas",
+    "Use soft delete (cancelamento) em vez de exclusão permanente"
+  ]
+}
+```
+
+### System Statistics
+Estatísticas em tempo real do sistema de consultas.
+
+**Available Resource:**
+- `system://statistics` - Estatísticas atualizadas em tempo real
+
+**Statistics Structure:**
+```json
+{
+  "totals": {
+    "doctors": 15,
+    "patients": 120,
+    "appointments": 300
+  },
+  "appointments_breakdown": {
+    "today": 8,
+    "upcoming": 45,
+    "completed": 200,
+    "cancelled": 12
+  },
+  "specialties": [
+    {"specialty": "Cardiologia", "count": 5},
+    {"specialty": "Dermatologia", "count": 3}
+  ],
+  "crud_operations_info": {
+    "available_tools": 13,
+    "read_operations": 6,
+    "create_operations": 1,
+    "update_operations": 3,
+    "delete_operations": 1
+  }
 }
 ```
 
