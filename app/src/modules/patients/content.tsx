@@ -23,10 +23,10 @@ export function Content() {
     mutationFn: (data: any) => addPatient(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["patients"] });
-      alert("Paciente salvo com sucesso!");
+      alert("Patient saved successfully!");
     },
     onError: (error: any) => {
-      alert(`Erro ao salvar paciente: ${error.message}`);
+      alert(`Error saving patient: ${error.message}`);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["patients"] });
@@ -37,10 +37,10 @@ export function Content() {
     mutationFn: ({ id, data }: any) => updatePatient({id, ...data}),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["patients"] });
-      alert("Paciente atualizado com sucesso!");
+      alert("Patient updated successfully!");
     },
     onError: (error: any) => {
-      alert(`Erro ao atualizar paciente: ${error.message}`);
+      alert(`Error updating patient: ${error.message}`);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["patients"] });
@@ -50,10 +50,10 @@ export function Content() {
   const { mutate: remove } = useMutation({
     mutationFn: removePatient,
     onSuccess: () => {
-      alert("Paciente removido com sucesso!");
+      alert("Patient removed successfully!");
     },
     onError: () => {
-      alert("Paciente removido com sucesso!");
+      alert("Error removing patient!");
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["patients"] });
@@ -82,7 +82,7 @@ export function Content() {
 
   return (
     <div className="container mx-auto">
-      <SectionTitle title="Pacientes">
+      <SectionTitle title="Patients">
         {selectedId}
         <Button
           variant="primary"
@@ -94,7 +94,7 @@ export function Content() {
             })
           }
         >
-          Adicionar Paciente
+          Add Patient
         </Button>
       </SectionTitle>
       <List
@@ -108,8 +108,8 @@ export function Content() {
         }}
         onDelete={(data) => {
           showModal(ModalConfirm, {
-            title: "Confirmar Exclusão",
-            description: "Você tem certeza que deseja excluir este paciente?",
+            title: "Confirm Deletion",
+            description: "Are you sure you want to delete this patient?",
             data,
             onClose: (option: boolean, data: any) => {
               handleRemove(option, data)

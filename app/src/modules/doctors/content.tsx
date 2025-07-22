@@ -16,10 +16,10 @@ export function Content() {
     mutationFn: (data: any) => addDoctor(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["doctors"] });
-      alert("Doutor salvo com sucesso!");
+      alert("Doctor saved successfully!");
     },
     onError: (error: any) => {
-      alert(`Erro ao salvar doutor: ${error.message}`);
+      alert(`Error saving doctor: ${error.message}`);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["doctors"] });
@@ -46,15 +46,15 @@ export function Content() {
             })
           }
         >
-          Adicionar Doutor
+          Add Doctor
         </Button>
       </SectionTitle>
       <List
         onEdit={(data) => {}}
         onDelete={(data) => {
           showModal(ModalConfirm, {
-            title: "Confirmar Exclusão",
-            description: "Você tem certeza que deseja excluir este doutor?",
+            title: "Confirm Deletion",
+            description: "Are you sure you want to delete this doctor?",
             onClose: hideModal,
           });
         }}

@@ -61,13 +61,13 @@ export function FormData({ onSubmit, onCancel, data, loading }: Props) {
               onCancel();
             }}
           >
-            Cancelar
+            Cancel
           </Button>
           <Button
             variant="secondary-outline"
             isLoading={loading}
           >
-            {data ? "Atualizar" : "Adicionar"}
+            {data ? "Update" : "Add"}
           </Button>
         </div>
       </form>

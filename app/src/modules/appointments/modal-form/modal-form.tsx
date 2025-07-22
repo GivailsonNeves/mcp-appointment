@@ -22,17 +22,17 @@ export function ModalForm({ onSubmit, onClose, data }: Props) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {data ? "Atualizar" : "Adicionar"} agendamento
+            {data ? "Update" : "Add"} appointment
           </DialogTitle>
           <DialogDescription>
             {data ? (
               <>
-                Atualize os campos do agendamento <strong>{
+                Update the fields of the appointment <strong>{
                   //@ts-ignore
                 (data).patient.name}</strong>
               </>
             ) : (
-              "Preencha os campos do agendamento"
+              "Fill in the appointment fields"
             )}
           </DialogDescription>
         </DialogHeader>

@@ -22,14 +22,14 @@ export function ModalConfirm({ onClose, title, description, data }: Props) {
     <Dialog open={true} onOpenChange={(_) => onClose(false)}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{title ? title : "Adicionar paciente"}</DialogTitle>
+          <DialogTitle>{title ? title : "Add Patient"}</DialogTitle>
           <DialogDescription>
-            {description ? description : "Preencha os campos da paciente"}
+            {description ? description : "Fill in the patient fields"}
           </DialogDescription>
         </DialogHeader>
         <div className="flex justify-end gap-2">
-          <Button variant="outline" onClick={() => onClose(false, data)}>Cancelar</Button>
-          <Button variant="primary" onClick={() => onClose(true, data)}>Confirmar</Button>
+          <Button variant="outline" onClick={() => onClose(false, data)}>Cancel</Button>
+          <Button variant="primary" onClick={() => onClose(true, data)}>Confirm</Button>
         </div>
       </DialogContent>
     </Dialog>

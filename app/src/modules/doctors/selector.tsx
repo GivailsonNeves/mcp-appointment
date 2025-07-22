@@ -37,7 +37,7 @@ export const Selector = ({
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Doctor</SelectLabel>
-          <SelectItem value="all">Todos</SelectItem>
+          <SelectItem value="all">All</SelectItem>
           {isLoading ? (
             <SelectItem value="loading" disabled>
               Loading...

@@ -36,11 +36,11 @@ export function FormData({ onSubmit, onCancel, data, loading }: Props) {
   return (
     <Form {...form}>
       <form
-        // @ts-expect-error - date is being converted to string before submit
         onSubmit={form.handleSubmit((d) =>
           onSubmit({
             ...d,
             id: data?.id,
+            //@ts-ignore
             date: d.date?.toISOString().split("T")[0],
           })
         )}
@@ -119,10 +119,10 @@ export function FormData({ onSubmit, onCancel, data, loading }: Props) {
               onCancel();
             }}
           >
-            Cancelar
+            Cancel
           </Button>
           <Button variant="secondary-outline" isLoading={loading}>
-            {data ? "Atualizar" : "Adicionar"}
+            {data ? "Update" : "Add"}
           </Button>
         </div>
       </form>

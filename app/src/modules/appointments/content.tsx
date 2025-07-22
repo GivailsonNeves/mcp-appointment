@@ -92,7 +92,7 @@ export function Content({ doctor, date }: Props) {
                 })
               }
             >
-              Criar novo agendamento
+              Create new appointment
             </Button>
           </div>
         </div>

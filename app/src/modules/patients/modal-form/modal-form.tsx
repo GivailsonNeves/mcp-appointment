@@ -22,15 +22,15 @@ export function ModalForm({ onSubmit, onClose, data }: Props) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {data ? "Atualizar" : "Adicionar"} paciente
+            {data ? "Update" : "Add"} patient
           </DialogTitle>
           <DialogDescription>
             {data ? (
               <>
-                Atualize os campos da paciente <strong>{data.name}</strong>
+                Update the fields of the patient <strong>{data.name}</strong>
               </>
             ) : (
-              "Preencha os campos da paciente"
+              "Fill in the patient fields"
             )}
           </DialogDescription>
         </DialogHeader>

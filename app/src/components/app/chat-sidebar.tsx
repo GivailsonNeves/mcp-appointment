@@ -20,7 +20,7 @@ import { Spinner } from "../ui/spinner";
 const DEFAULT_MESSAGES = [
   {
     role: "assistant",
-    content: "Olá! Sou a assistente virtual do sistema de agendamento de consultas. Como posso ajudar você hoje?",
+    content: "Hi! I am the virtual assistant of the appointment scheduling system. How can I help you today?",
   },
 ];
 

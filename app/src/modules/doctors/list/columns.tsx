@@ -10,8 +10,8 @@ const useColumns = (props: TableActionsProps<any>) => {
       accessorKey: "id",
     },  
     {
-      id: "nome",
-      header: "Nome",
+      id: "name",
+      header: "Name",
       accessorKey: "name",
     },  
     {

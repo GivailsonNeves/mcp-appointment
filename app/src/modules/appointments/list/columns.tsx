@@ -26,11 +26,11 @@ const useColumns = (props: TableActionsProps<any>) => {
     },
     {
       id: "assistant",
-      header: "Criado por IA",
+      header: "Created by Assistant",
       accessorKey: "assistant",
       cell: ({ getValue }) => {
         const value = getValue() as boolean;
-        return value ? "Sim" : "Não";
+        return value ? "Yes" : "No";
       },
     },
     {
