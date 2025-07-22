@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MCP Appointment Management App
 
-## Getting Started
+Appointment management system built with Next.js 15
 
-First, run the development server:
+## Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Framework**: Next.js 15 with App Router
+- **Styling**: Tailwind CSS with Radix UI components
+- **Validation**: Zod schema validation
+- **Database**: Firebase Firestore
+
+## Features
+
+### Core Modules
+- **Doctors Management**: Complete CRUD operations for medical professionals
+- **Patients Management**: Patient registration and profile management
+- **Appointments**: Scheduling system with time slot management and conflict prevention
+- **AI Assistant Integration**: Chat interface powered by MCP for natural language appointment management
+
+### Key Capabilities
+- Appointment and scheduling management application
+- AI-assisted appointment booking through chat interface
+
+## Prerequisites
+
+- Node.js 18.0 or higher
+- Firebase project with Firestore enabled
+- MCP Client running (see ../mcp-client/README.md)
+
+## Environment Setup
+
+Create a `.env.local` file in the root directory with the following variables:
+
+```env
+# API Configuration
+NEXT_PUBLIC_API_URL=http://localhost:3000/api
+NEXT_PUBLIC_CHAT_API_URL=http://localhost:3005
+
+# Firebase Configuration
+FIREBASE_PROJECT_ID=your_firebase_project_id
+FIREBASE_CLIENT_EMAIL=your_service_account_email
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY_HERE\n-----END PRIVATE KEY-----\n"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Install dependencies:
+```bash
+npm install
+```
 
-## Learn More
+2. Ensure Firebase Firestore is configured with the following collections:
+   - `doctors`
+   - `patients` 
+   - `appointments`
 
-To learn more about Next.js, take a look at the following resources:
+## Running the Application
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Development Mode
+```bash
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The application will start at [http://localhost:3000](http://localhost:3000)
 
-## Deploy on Vercel
+## Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+├── app/                
+│   ├── api/            # API routes for doctors, patients, appointments
+│   ├── appointments/   # Appointment management pages
+│   ├── doctors/        # Doctor management pages
+│   └── patients/       # Patient management pages
+├── components/         
+│   ├── ui/            # Base UI components
+│   └── layout/        # Layout components
+├── modules/           
+│   ├── appointments/ 
+│   ├── doctors/       
+│   └── patients/      
+├── api-services/      
+├── services/          # HTTP client and utilities
+└── lib/              # Shared utilities and configurations
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## API Integration
+
+The app communicates with:
+1. **Internal API Routes** (`/api/*`) - For CRUD operations
+2. **MCP Client** (`http://localhost:3005`) - For AI assistant chat functionality
+
+### Available Endpoints
+
+- `GET/POST /api/doctors` - Doctor management
+- `GET/POST /api/patients` - Patient management  
+- `GET/POST /api/appointments` - Appointment management
+- `POST http://localhost:3005/chat` - AI assistant chat
+
+## MCP Integration
+
+This application showcases Model Context Protocol integration through:
+
+- **AI Assistant**: Natural language appointment booking and management
+- **Real-time Communication**: Direct integration with MCP tools for appointment operations
+- **Smart Scheduling**: AI-powered appointment suggestions and conflict resolution
+
+The chat interface allows users to:
+- Book appointments using natural language
+- Query appointment schedules
+- Get available time slots
+- Manage patient and doctor information

@@ -22,7 +22,7 @@ async function main() {
   // Configurando e iniciando o servidor
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("Weather MCP Server running on stdio");
+  console.log("Appointments MCP Server running on stdio");
 }
 
 main().catch((error) => {
