@@ -37,15 +37,18 @@ export const ChatProviderProvider = ({ children }: { children: ReactNode }) => {
       if (data.length && data.at(-1)) {
         const lastMessage: any = data.at(-1);
         try {
-          const llmsAnswer = lastMessage.content?.[0].text
-            ? JSON.parse(lastMessage.content[0].text)
-            : {};
+          const textResponse = lastMessage.content?.[0].text || "";
+          // Extrair o JSON da string, mesmo que haja texto antes dele
+          const jsonMatch = textResponse.match(/{[\s\S]*}/);
+          const jsonString = jsonMatch ? jsonMatch[0] : "{}";
+          
+          const llmsAnswer = JSON.parse(jsonString);
 
           setConversation((prev) => [
             ...prev,
             {
               role: "assistant",
-              content: llmsAnswer.llm_response,
+              content: llmsAnswer.llm_response || textResponse.replace(jsonString, "").trim(),
             },
           ]);
 
@@ -66,7 +69,7 @@ export const ChatProviderProvider = ({ children }: { children: ReactNode }) => {
             ...prev,
             {
               role: "assistant",
-              content: lastMessage.content.text,
+              content: lastMessage.content?.[0]?.text || "An error occurred.",
             },
           ]);
         }

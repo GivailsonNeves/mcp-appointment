@@ -27,13 +27,17 @@ export const Selector = ({
   });
 
   return (
-    <Select value={doctor} onValueChange={onChange}>
+    <Select
+      value={doctor || "all"}
+      onValueChange={(value) => onChange?.(value === "all" ? "" : value)}
+    >
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Select a doctor" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Doctor</SelectLabel>
+          <SelectItem value="all">Todos</SelectItem>
           {isLoading ? (
             <SelectItem value="loading" disabled>
               Loading...

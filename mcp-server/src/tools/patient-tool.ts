@@ -216,4 +216,46 @@ export function registerPatientTool(server: McpServer) {
           }
         }
     );
+
+    server.tool(
+        "create-patient",
+        "Create a new patient record",
+        {
+            name: z.string().describe("The full name of the patient"),
+            email: z.string().email().optional().describe("The email address of the patient"),
+            phone: z.string().describe("The phone number of the patient"),
+            birthDate: z.string().optional().describe("The patient's birth date (YYYY-MM-DD)"),
+            address: z.string().optional().describe("The patient's full address"),
+        },
+        async (params) => {
+            try {
+                const { data } = await apiClient.post("/patients", params);
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify({
+                                success: true,
+                                message: "Patient created successfully",
+                                patient: data,
+                            }, null, 2),
+                        },
+                    ],
+                };
+            } catch (error: any) {
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify({
+                                success: false,
+                                error: "Error creating patient",
+                                details: error.response?.data?.message || error.message,
+                            }, null, 2),
+                        },
+                    ],
+                };
+            }
+        }
+    );
 }

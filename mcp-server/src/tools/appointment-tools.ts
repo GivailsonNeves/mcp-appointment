@@ -49,16 +49,34 @@ export function registerAppointmentsTool(server: McpServer) {
     );
     server.tool(
       "create-appointment",
-      "Create a new appointment",
+      "Create a new appointment, creating the patient if it does not exist. Always ask for the full name (including last name) and phone number if the patient needs to be created.",
       {
-        patientId: z.string().describe("The ID of the patient"),
+        patientId: z.string().optional().describe("The ID of the patient. If not provided, a new patient will be created"),
+        patientName: z.string().optional().describe("The full name of the patient to be created. If the last name is missing, you must ask for it."),
+        patientPhone: z.string().optional().describe("The phone of the patient to be created"),
         doctorId: z.string().describe("The ID of the doctor"),
         date: z.string().describe("The date of the appointment (YYYY-MM-DD)"),
         time: z.string(z.enum(["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"])).describe("The time of the appointment (HH:mm)"),
       },
-      async ({ patientId, doctorId, date, time }) => {
+      async ({ patientId, patientName, patientPhone, doctorId, date, time }) => {
+        let finalPatientId = patientId;
+
+        if (!finalPatientId) {
+            if (!patientName || !patientPhone) {
+                throw new Error("Patient name and phone are required to create a new patient.");
+            }
+            if (patientName.split(" ").length < 2) {
+                throw new Error("The patient's full name (including last name) is required.");
+            }
+            const { data: newPatient } = await apiClient.post("/patients", {
+                name: patientName,
+                phone: patientPhone,
+            });
+            finalPatientId = newPatient.id;
+        }
+
         const { data } = await apiClient.post("/appointments", {
-          patientId,
+          patientId: finalPatientId,
           doctorId,
           date,
           time,
