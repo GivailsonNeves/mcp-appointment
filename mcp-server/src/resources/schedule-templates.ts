@@ -2,33 +2,33 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import * as fs from 'fs';
 import * as path from 'path';
 
-// Carregar dados JSON de forma síncrona
+// Load JSON data synchronously
 const scheduleTemplatesData = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'data/schedule-templates.json'), 'utf8')
 );
 import { generateTimeSlots } from "./utils/time-helpers.js";
 
 export function registerScheduleTemplateResources(server: McpServer) {
-  // Horário Padrão Segunda-Sexta
+  // Standard Monday-Friday Schedule
   server.resource(
-    "Horário Padrão Segunda-Sexta",
+    "Standard Monday-Friday Schedule",
     "schedule-templates://standard-weekday",
-    { description: "Horário padrão segunda-feira a sexta-feira das 9h às 17h" },
+    { description: "Standard Monday to Friday schedule from 9am to 5pm" },
     async () => {
       const template = { ...scheduleTemplatesData["standard-weekday"] };
       
-      // Adicionar slots calculados para cada dia
-      Object.keys(template.horarios).forEach(dia => {
-        const horario = template.horarios[dia as keyof typeof template.horarios];
-        if ('inicio' in horario && horario.inicio) {
+      // Add calculated slots for each day
+      Object.keys(template.schedules).forEach(day => {
+        const schedule = template.schedules[day as keyof typeof template.schedules];
+        if ('start' in schedule && schedule.start) {
           const slots = generateTimeSlots(
-            horario.inicio, 
-            horario.fim, 
-            horario.intervalo_almoco?.inicio || null, 
-            horario.intervalo_almoco?.fim || null, 
-            horario.duracao_slot
+            schedule.start, 
+            schedule.end, 
+            schedule.lunch_break?.start || null, 
+            schedule.lunch_break?.end || null, 
+            schedule.slot_duration
           );
-          (horario as any).slots = slots;
+          (schedule as any).slots = slots;
         }
       });
 
@@ -44,15 +44,15 @@ export function registerScheduleTemplateResources(server: McpServer) {
     }
   );
 
-  // Horário Estendido
+  // Extended Schedule
   server.resource(
-    "Horário Estendido", 
+    "Extended Schedule", 
     "schedule-templates://extended-hours",
-    { description: "Horário estendido durante semana com sábado de manhã" },
+    { description: "Extended weekday schedule with Saturday morning" },
     async () => {
       const template = { ...scheduleTemplatesData["extended-hours"] };
       
-      // Adicionar slots calculados para cada dia
+      // Add calculated slots for each day
       Object.keys(template.horarios).forEach(dia => {
         const horario = template.horarios[dia as keyof typeof template.horarios];
         if ('inicio' in horario && horario.inicio) {
@@ -87,7 +87,7 @@ export function registerScheduleTemplateResources(server: McpServer) {
     async () => {
       const template = { ...scheduleTemplatesData["part-time"] };
       
-      // Adicionar slots calculados para cada dia
+      // Add calculated slots for each day
       Object.keys(template.horarios).forEach(dia => {
         const horario = template.horarios[dia as keyof typeof template.horarios];
         if ('inicio' in horario && horario.inicio) {
@@ -116,9 +116,9 @@ export function registerScheduleTemplateResources(server: McpServer) {
 
   // Plantão de Emergência
   server.resource(
-    "Plantão de Emergência",
+    "Emergency Shift",
     "schedule-templates://emergency",
-    { description: "Cobertura de plantão 24/7 para emergências" },
+    { description: "24/7 emergency shift coverage" },
     async () => {
       return {
         contents: [
@@ -140,7 +140,7 @@ export function registerScheduleTemplateResources(server: McpServer) {
     async () => {
       const template = { ...scheduleTemplatesData.specialist };
       
-      // Adicionar slots calculados para cada dia
+      // Add calculated slots for each day
       Object.keys(template.horarios).forEach(dia => {
         const horario = template.horarios[dia as keyof typeof template.horarios];
         if ('inicio' in horario && horario.inicio) {

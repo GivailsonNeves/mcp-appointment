@@ -1,6 +1,6 @@
 export function getFrequentDoctors(appointments: any[]) {
   const doctorCounts = appointments.reduce((acc: any, apt: any) => {
-    const doctorName = apt.doctor_name || `Médico ${apt.doctor_id}`;
+    const doctorName = apt.doctor_name || `Doctor ${apt.doctor_id}`;
     acc[doctorName] = (acc[doctorName] || 0) + 1;
     return acc;
   }, {});
@@ -8,18 +8,18 @@ export function getFrequentDoctors(appointments: any[]) {
   return Object.entries(doctorCounts)
     .sort(([,a], [,b]) => (b as number) - (a as number))
     .slice(0, 3)
-    .map(([name, count]) => ({ nome: name, consultas: count }));
+    .map(([name, count]) => ({ name: name, appointments: count }));
 }
 
 export function getAppointmentTypes(appointments: any[]) {
   const typeCounts = appointments.reduce((acc: any, apt: any) => {
-    const type = apt.type || 'consulta';
+    const type = apt.type || 'consultation';
     acc[type] = (acc[type] || 0) + 1;
     return acc;
   }, {});
 
   return Object.entries(typeCounts)
-    .map(([type, count]) => ({ tipo: type, quantidade: count }));
+    .map(([type, count]) => ({ type: type, count: count }));
 }
 
 export function calculateAverageInterval(appointments: any[]) {
@@ -45,7 +45,7 @@ export function getBusiestDay(appointments: any[]) {
   appointments.forEach((apt: any) => {
     if (apt.date) {
       const date = new Date(apt.date);
-      const dayName = date.toLocaleDateString('pt-BR', { weekday: 'long' });
+      const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
       dayCounts[dayName] = (dayCounts[dayName] || 0) + 1;
     }
   });
@@ -53,5 +53,5 @@ export function getBusiestDay(appointments: any[]) {
   const busiestDay = Object.entries(dayCounts)
     .sort(([,a], [,b]) => (b as number) - (a as number))[0];
     
-  return busiestDay ? { dia: busiestDay[0], consultas: busiestDay[1] } : { dia: 'N/A', consultas: 0 };
+  return busiestDay ? { day: busiestDay[0], appointments: busiestDay[1] } : { day: 'N/A', appointments: 0 };
 }

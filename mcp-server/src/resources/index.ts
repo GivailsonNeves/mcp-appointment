@@ -6,36 +6,36 @@ import { registerPatientHistoryResources } from "./patient-history.js";
 import { registerSystemResources } from "./system-resources.js";
 
 /**
- * Registra todos os recursos MCP do sistema de consultas
+ * Registers all MCP resources for the appointment system
  * 
- * Recursos implementados:
- * - Templates de Consulta: 4 tipos (consulta, checkup, retorno, emergência)
- * - Templates de Horários: 5 padrões (padrão, estendido, meio-período, emergência, especialista)
- * - Perfis de Médicos: Recursos dinâmicos com especialidades e horários
- * - Histórico de Pacientes: Análise completa de consultas e padrões
- * - Recursos do Sistema: Estatísticas e guias de operações CRUD
+ * Implemented resources:
+ * - Appointment Templates: 4 types (consultation, checkup, followup, emergency)
+ * - Schedule Templates: 5 patterns (standard, extended, part-time, emergency, specialist)
+ * - Doctor Profiles: Dynamic resources with specialties and schedules
+ * - Patient History: Complete analysis of appointments and patterns
+ * - System Resources: Statistics and CRUD operations guides
  */
 export function registerAllResources(server: McpServer) {
-  // Templates de Consulta (4 recursos estáticos)
+  // Appointment Templates (4 static resources)
   registerAppointmentTemplateResources(server);
   
-  // Templates de Horários (5 recursos estáticos)
+  // Schedule Templates (5 static resources)
   registerScheduleTemplateResources(server);
   
-  // Perfis de Médicos (recursos dinâmicos)
+  // Doctor Profiles (dynamic resources)
   registerDoctorProfileResources(server);
   
-  // Histórico de Pacientes (recursos dinâmicos)
+  // Patient History (dynamic resources)
   registerPatientHistoryResources(server);
   
-  // Recursos do Sistema (estatísticas e guias)
+  // System Resources (statistics and guides)
   registerSystemResources(server);
 }
 
 /**
- * Resumo dos recursos registrados:
+ * Summary of registered resources:
  * 
- * RECURSOS ESTÁTICOS (9):
+ * STATIC RESOURCES (9):
  * - appointment-templates://consultation
  * - appointment-templates://checkup
  * - appointment-templates://followup
@@ -46,15 +46,15 @@ export function registerAllResources(server: McpServer) {
  * - schedule-templates://emergency
  * - schedule-templates://specialist
  * 
- * RECURSOS DINÂMICOS (4+):
+ * DYNAMIC RESOURCES (4+):
  * - doctor-profiles://all
  * - doctor-profiles://{doctor_id}
  * - patient-history://all
  * - patient-history://{patient_id}
  * 
- * RECURSOS DO SISTEMA (2):
+ * SYSTEM RESOURCES (2):
  * - crud-operations://guide
  * - system://statistics
  * 
- * TOTAL: 15+ recursos MCP implementados
+ * TOTAL: 15+ MCP resources implemented
  */

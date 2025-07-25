@@ -2,17 +2,17 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import * as fs from 'fs';
 import * as path from 'path';
 
-// Carregar dados JSON de forma síncrona
+// Load JSON data synchronously
 const appointmentTemplatesData = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'data/appointment-templates.json'), 'utf8')
 );
 
 export function registerAppointmentTemplateResources(server: McpServer) {
-  // Template de Consulta Geral
+  // General Consultation Template
   server.resource(
-    "Template de Consulta Geral",
+    "General Consultation Template",
     "appointment-templates://consultation",
-    { description: "Template para consulta médica geral" },
+    { description: "Template for general medical consultation" },
     async () => {
       return {
         contents: [
@@ -26,11 +26,11 @@ export function registerAppointmentTemplateResources(server: McpServer) {
     }
   );
 
-  // Template de Checkup
+  // Checkup Template
   server.resource(
-    "Template de Checkup", 
+    "Checkup Template", 
     "appointment-templates://checkup",
-    { description: "Template para exame médico de rotina anual" },
+    { description: "Template for annual routine medical exam" },
     async () => {
       return {
         contents: [
@@ -44,11 +44,11 @@ export function registerAppointmentTemplateResources(server: McpServer) {
     }
   );
 
-  // Template de Retorno
+  // Follow-up Template
   server.resource(
-    "Template de Retorno",
+    "Follow-up Template",
     "appointment-templates://followup", 
-    { description: "Template para consultas de retorno" },
+    { description: "Template for follow-up appointments" },
     async () => {
       return {
         contents: [
@@ -62,11 +62,11 @@ export function registerAppointmentTemplateResources(server: McpServer) {
     }
   );
 
-  // Template de Emergência
+  // Emergency Template
   server.resource(
-    "Template de Emergência",
+    "Emergency Template",
     "appointment-templates://emergency",
-    { description: "Template para consultas de emergência" }, 
+    { description: "Template for emergency appointments" }, 
     async () => {
       return {
         contents: [

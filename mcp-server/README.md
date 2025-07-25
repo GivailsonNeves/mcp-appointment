@@ -111,7 +111,7 @@ List all doctors with pagination and filter options.
   "arguments": {
     "page": 1,
     "limit": 20,
-    "specialty": "cardiologia"
+    "specialty": "cardiology"
   }
 }
 ```

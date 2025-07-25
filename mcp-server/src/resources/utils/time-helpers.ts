@@ -12,7 +12,7 @@ export function generateTimeSlots(
   const lunchEndMinutes = lunchEnd ? timeToMinutes(lunchEnd) : null;
 
   for (let time = start; time < end; time += duration) {
-    // Pular horário de almoço
+    // Skip lunch time
     if (lunchStartMinutes && lunchEndMinutes && 
         time >= lunchStartMinutes && time < lunchEndMinutes) {
       continue;

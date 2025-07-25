@@ -113,9 +113,9 @@ export function registerPatientHistoryResources(server: McpServer) {
             id: patient.data.id,
             nome: patient.data.name,
             email: patient.data.email,
-            telefone: patient.data.phone,
-            data_nascimento: patient.data.birth_date,
-            endereco: patient.data.address
+            phone: patient.data.phone,
+            birth_date: patient.data.birth_date,
+            address: patient.data.address
           },
           total_consultas: consultasPaciente.length,
           consultas: consultasOrdenadas.map((apt: any) => ({

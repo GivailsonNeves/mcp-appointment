@@ -14,7 +14,7 @@
           "tool": "list-doctors", 
           "description": "List doctors with pagination and filters",
           "parametros": ["page", "limit", "specialty", "search"],
-          "exemplo": { "specialty": "cardiologia", "limit": 10 }
+          "example": { "specialty": "cardiology", "limit": 10 }
         },
         {
           "tool": "update-doctor",
