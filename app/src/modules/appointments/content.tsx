@@ -109,9 +109,9 @@ export function Content({ doctor, date }: Props) {
         }}
         onDelete={(data) => {
           showModal(ModalConfirm, {
-            title: "Confirmar Exclusão",
+            title: "Confirm Deletion",
             description:
-              "Você tem certeza que deseja excluir este agendamento?",
+              "Are you sure you want to delete this appointment?",
             onClose: hideModal,
           });
         }}

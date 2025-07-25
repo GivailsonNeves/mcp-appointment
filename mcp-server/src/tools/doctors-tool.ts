@@ -65,12 +65,12 @@ export function registerDoctorsTool(server: McpServer) {
 
     server.tool(
         "list-doctors",
-        "Lista todos os médicos com opções de paginação e filtros",
+        "List all doctors with pagination and filter options",
         {
-          page: z.number().optional().describe("Número da página (começa em 1)"),
-          limit: z.number().optional().describe("Quantidade de médicos por página (máximo 50)"),
-          specialty: z.string().optional().describe("Filtrar por especialidade"),
-          search: z.string().optional().describe("Buscar por nome ou email"),
+          page: z.number().optional().describe("Page number (starts at 1)"),
+          limit: z.number().optional().describe("Number of doctors per page (maximum 50)"),
+          specialty: z.string().optional().describe("Filter by specialty"),
+          search: z.string().optional().describe("Search by name or email"),
         },
         async ({ page = 1, limit = 20, specialty, search }) => {
           // Validar limites
@@ -86,10 +86,10 @@ export function registerDoctorsTool(server: McpServer) {
             },
           });
 
-          // Se a API não suporta paginação nativa, implementar do lado cliente
+          // If API doesn't support native pagination, implement client-side
           let doctors = Array.isArray(data) ? data : data.doctors || [];
           
-          // Aplicar filtros se necessário
+          // Apply filters if necessary
           if (specialty) {
             doctors = doctors.filter((doctor: any) => 
               doctor.specialty?.toLowerCase().includes(specialty.toLowerCase())
@@ -103,7 +103,7 @@ export function registerDoctorsTool(server: McpServer) {
             );
           }
 
-          // Aplicar paginação
+          // Apply pagination
           const startIndex = (page - 1) * limit;
           const endIndex = startIndex + limit;
           const paginatedDoctors = doctors.slice(startIndex, endIndex);
@@ -140,31 +140,31 @@ export function registerDoctorsTool(server: McpServer) {
 
     server.tool(
         "update-doctor",
-        "Atualizar informações de um médico existente",
+        "Update information of an existing doctor",
         {
-          id: z.string().describe("ID do médico a ser atualizado"),
-          name: z.string().optional().describe("Novo nome do médico"),
-          email: z.string().optional().describe("Novo email do médico"),
-          phone: z.string().optional().describe("Novo telefone do médico"),
-          specialty: z.string().optional().describe("Nova especialidade"),
-          experience: z.string().optional().describe("Experiência profissional"),
-          qualifications: z.array(z.string()).optional().describe("Lista de qualificações"),
-          languages: z.array(z.string()).optional().describe("Idiomas falados"),
-          acceptsEmergencies: z.boolean().optional().describe("Aceita emergências"),
-          officeLocation: z.string().optional().describe("Localização do consultório"),
-          address: z.string().optional().describe("Endereço completo"),
+          id: z.string().describe("ID of the doctor to be updated"),
+          name: z.string().optional().describe("New doctor name"),
+          email: z.string().optional().describe("New doctor email"),
+          phone: z.string().optional().describe("New doctor phone"),
+          specialty: z.string().optional().describe("New specialty"),
+          experience: z.string().optional().describe("Professional experience"),
+          qualifications: z.array(z.string()).optional().describe("List of qualifications"),
+          languages: z.array(z.string()).optional().describe("Languages spoken"),
+          acceptsEmergencies: z.boolean().optional().describe("Accepts emergencies"),
+          officeLocation: z.string().optional().describe("Office location"),
+          address: z.string().optional().describe("Complete address"),
         },
         async (params) => {
           const { id, ...updateData } = params;
 
           try {
-            // Remover campos undefined para não enviar à API
+            // Remove undefined fields to not send to API
             const cleanData = Object.fromEntries(
               Object.entries(updateData).filter(([_, value]) => value !== undefined)
             );
 
             if (Object.keys(cleanData).length === 0) {
-              throw new Error("Nenhum campo para atualizar foi fornecido");
+              throw new Error("No fields to update were provided");
             }
 
             const { data } = await apiClient.put(`/doctors/${id}`, cleanData);
@@ -175,7 +175,7 @@ export function registerDoctorsTool(server: McpServer) {
                   type: "text",
                   text: JSON.stringify({
                     success: true,
-                    message: "Médico atualizado com sucesso",
+                    message: "Doctor updated successfully",
                     doctor: data,
                     updatedFields: Object.keys(cleanData),
                   }, null, 2),
@@ -189,7 +189,7 @@ export function registerDoctorsTool(server: McpServer) {
                   type: "text",
                   text: JSON.stringify({
                     success: false,
-                    error: "Erro ao atualizar médico",
+                    error: "Error updating doctor",
                     details: error.response?.data?.message || error.message,
                   }, null, 2),
                 },

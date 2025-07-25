@@ -1,86 +1,86 @@
 {
   "standard-weekday": {
-    "nome": "Horário Padrão Segunda-Sexta",
-    "tipo": "segunda_a_sexta",
-    "descricao": "Horário padrão de segunda a sexta-feira das 9h às 17h",
-    "horarios": {
-      "segunda": {
-        "inicio": "09:00",
-        "fim": "17:00",
-        "intervalo_almoco": { "inicio": "12:00", "fim": "13:00" },
-        "duracao_slot": 30
+    "nome": "Standard Monday-Friday Schedule",
+    "tipo": "monday_to_friday",
+    "descricao": "Standard Monday to Friday schedule from 9am to 5pm",
+    "schedules": {
+      "monday": {
+        "start": "09:00",
+        "end": "17:00",
+        "lunch_break": { "start": "12:00", "end": "13:00" },
+        "slot_duration": 30
       },
-      "terca": {
-        "inicio": "09:00",
-        "fim": "17:00",
-        "intervalo_almoco": { "inicio": "12:00", "fim": "13:00" },
-        "duracao_slot": 30
+      "tuesday": {
+        "start": "09:00",
+        "end": "17:00",
+        "lunch_break": { "start": "12:00", "end": "13:00" },
+        "slot_duration": 30
       },
-      "quarta": {
-        "inicio": "09:00",
-        "fim": "17:00",
-        "intervalo_almoco": { "inicio": "12:00", "fim": "13:00" },
-        "duracao_slot": 30
+      "wednesday": {
+        "start": "09:00",
+        "end": "17:00",
+        "lunch_break": { "start": "12:00", "end": "13:00" },
+        "slot_duration": 30
       },
-      "quinta": {
-        "inicio": "09:00",
-        "fim": "17:00",
-        "intervalo_almoco": { "inicio": "12:00", "fim": "13:00" },
-        "duracao_slot": 30
+      "thursday": {
+        "start": "09:00",
+        "end": "17:00",
+        "lunch_break": { "start": "12:00", "end": "13:00" },
+        "slot_duration": 30
       },
-      "sexta": {
-        "inicio": "09:00",
-        "fim": "17:00",
-        "intervalo_almoco": { "inicio": "12:00", "fim": "13:00" },
-        "duracao_slot": 30
+      "friday": {
+        "start": "09:00",
+        "end": "17:00",
+        "lunch_break": { "start": "12:00", "end": "13:00" },
+        "slot_duration": 30
       },
-      "sabado": { "fechado": true },
-      "domingo": { "fechado": true }
+      "saturday": { "closed": true },
+      "sunday": { "closed": true }
     },
-    "horas_semanais_total": 40,
-    "max_consultas_diarias": 16
+    "total_weekly_hours": 40,
+    "max_daily_appointments": 16
   },
   "extended-hours": {
-    "nome": "Horário Estendido",
-    "tipo": "estendido",
-    "descricao": "Horário estendido durante semana com sábado de manhã",
-    "horarios": {
-      "segunda": {
+    "nome": "Extended Schedule",
+    "tipo": "extended",
+    "descricao": "Extended weekday schedule with Saturday morning",
+    "schedules": {
+      "monday": {
         "inicio": "08:00",
         "fim": "18:00",
         "intervalo_almoco": { "inicio": "12:30", "fim": "13:30" },
-        "duracao_slot": 30
+        "slot_duration": 30
       },
-      "terca": {
+      "tuesday": {
         "inicio": "08:00",
         "fim": "18:00",
         "intervalo_almoco": { "inicio": "12:30", "fim": "13:30" },
-        "duracao_slot": 30
+        "slot_duration": 30
       },
-      "quarta": {
+      "wednesday": {
         "inicio": "08:00",
         "fim": "18:00",
         "intervalo_almoco": { "inicio": "12:30", "fim": "13:30" },
-        "duracao_slot": 30
+        "slot_duration": 30
       },
-      "quinta": {
+      "thursday": {
         "inicio": "08:00",
         "fim": "18:00",
         "intervalo_almoco": { "inicio": "12:30", "fim": "13:30" },
-        "duracao_slot": 30
+        "slot_duration": 30
       },
-      "sexta": {
+      "friday": {
         "inicio": "08:00",
         "fim": "18:00",
         "intervalo_almoco": { "inicio": "12:30", "fim": "13:30" },
-        "duracao_slot": 30
+        "slot_duration": 30
       },
       "sabado": {
-        "inicio": "09:00",
+        "start": "09:00",
         "fim": "13:00",
-        "duracao_slot": 30
+        "slot_duration": 30
       },
-      "domingo": { "fechado": true }
+      "sunday": { "closed": true }
     },
     "horas_semanais_total": 54,
     "max_consultas_diarias": 20
@@ -89,67 +89,67 @@
     "nome": "Meio Período",
     "tipo": "meio_periodo",
     "descricao": "Horário de meio período - 3 dias por semana",
-    "horarios": {
-      "segunda": { "fechado": true },
-      "terca": {
-        "inicio": "09:00",
-        "fim": "17:00",
-        "intervalo_almoco": { "inicio": "12:00", "fim": "13:00" },
-        "duracao_slot": 30
+    "schedules": {
+      "monday": { "fechado": true },
+      "tuesday": {
+        "start": "09:00",
+        "end": "17:00",
+        "lunch_break": { "start": "12:00", "end": "13:00" },
+        "slot_duration": 30
       },
-      "quarta": { "fechado": true },
-      "quinta": {
-        "inicio": "09:00",
-        "fim": "17:00",
-        "intervalo_almoco": { "inicio": "12:00", "fim": "13:00" },
-        "duracao_slot": 30
+      "wednesday": { "fechado": true },
+      "thursday": {
+        "start": "09:00",
+        "end": "17:00",
+        "lunch_break": { "start": "12:00", "end": "13:00" },
+        "slot_duration": 30
       },
-      "sexta": { "fechado": true },
+      "friday": { "fechado": true },
       "sabado": {
-        "inicio": "09:00",
-        "fim": "17:00",
-        "intervalo_almoco": { "inicio": "12:00", "fim": "13:00" },
-        "duracao_slot": 30
+        "start": "09:00",
+        "end": "17:00",
+        "lunch_break": { "start": "12:00", "end": "13:00" },
+        "slot_duration": 30
       },
-      "domingo": { "fechado": true }
+      "sunday": { "closed": true }
     },
     "horas_semanais_total": 24,
-    "max_consultas_diarias": 16
+    "max_daily_appointments": 16
   },
   "emergency": {
     "nome": "Plantão de Emergência",
     "tipo": "emergencia",
     "descricao": "Cobertura de plantão 24/7 para emergências",
-    "horarios": {
-      "segunda": {
+    "schedules": {
+      "monday": {
         "inicio": "00:00",
         "fim": "23:59",
         "duracao_slot": 15,
         "apenas_emergencia": true,
         "slots": "plantao"
       },
-      "terca": {
+      "tuesday": {
         "inicio": "00:00",
         "fim": "23:59",
         "duracao_slot": 15,
         "apenas_emergencia": true,
         "slots": "plantao"
       },
-      "quarta": {
+      "wednesday": {
         "inicio": "00:00",
         "fim": "23:59",
         "duracao_slot": 15,
         "apenas_emergencia": true,
         "slots": "plantao"
       },
-      "quinta": {
+      "thursday": {
         "inicio": "00:00",
         "fim": "23:59",
         "duracao_slot": 15,
         "apenas_emergencia": true,
         "slots": "plantao"
       },
-      "sexta": {
+      "friday": {
         "inicio": "00:00",
         "fim": "23:59",
         "duracao_slot": 15,
@@ -179,34 +179,34 @@
     "nome": "Horário Especialista",
     "tipo": "especialista",
     "descricao": "Consultas especializadas com slots mais longos",
-    "horarios": {
-      "segunda": {
-        "inicio": "09:00",
+    "schedules": {
+      "monday": {
+        "start": "09:00",
         "fim": "16:00",
-        "intervalo_almoco": { "inicio": "12:00", "fim": "13:00" },
+        "lunch_break": { "start": "12:00", "end": "13:00" },
         "duracao_slot": 60
       },
-      "terca": {
-        "inicio": "09:00",
+      "tuesday": {
+        "start": "09:00",
         "fim": "16:00",
-        "intervalo_almoco": { "inicio": "12:00", "fim": "13:00" },
+        "lunch_break": { "start": "12:00", "end": "13:00" },
         "duracao_slot": 60
       },
-      "quarta": {
-        "inicio": "09:00",
+      "wednesday": {
+        "start": "09:00",
         "fim": "16:00",
-        "intervalo_almoco": { "inicio": "12:00", "fim": "13:00" },
+        "lunch_break": { "start": "12:00", "end": "13:00" },
         "duracao_slot": 60
       },
-      "quinta": {
-        "inicio": "09:00",
+      "thursday": {
+        "start": "09:00",
         "fim": "16:00",
-        "intervalo_almoco": { "inicio": "12:00", "fim": "13:00" },
+        "lunch_break": { "start": "12:00", "end": "13:00" },
         "duracao_slot": 60
       },
-      "sexta": { "fechado": true },
-      "sabado": { "fechado": true },
-      "domingo": { "fechado": true }
+      "friday": { "fechado": true },
+      "saturday": { "closed": true },
+      "sunday": { "closed": true }
     },
     "horas_semanais_total": 28,
     "max_consultas_diarias": 6,

@@ -4,17 +4,17 @@ import { getBusiestDay } from "./utils/analysis-helpers.js";
 import * as fs from 'fs';
 import * as path from 'path';
 
-// Carregar dados JSON de forma síncrona
+// Load JSON data synchronously
 const crudGuideData = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'data/crud-operations-guide.json'), 'utf8')
 );
 
 export function registerSystemResources(server: McpServer) {
-  // Guia de Operações CRUD
+  // CRUD Operations Guide
   server.resource(
-    "Guia de Operações CRUD",
+    "CRUD Operations Guide",
     "crud-operations://guide",
-    { description: "Guia completo de operações CRUD disponíveis" },
+    { description: "Complete guide of available CRUD operations" },
     async () => {
       return {
         contents: [
@@ -28,71 +28,71 @@ export function registerSystemResources(server: McpServer) {
     }
   );
 
-  // Estatísticas do Sistema
+  // System Statistics
   server.resource(
-    "Estatísticas do Sistema",
+    "System Statistics",
     "system://statistics",
-    { description: "Estatísticas em tempo real do sistema de consultas" },
+    { description: "Real-time statistics of the appointment system" },
     async () => {
       try {
-        const [medicos, pacientes, consultas] = await Promise.all([
+        const [doctors, patients, appointments] = await Promise.all([
           apiClient.get('/doctors'),
           apiClient.get('/patients'),
           apiClient.get('/appointments')
         ]);
 
-        const todosMedicos = Array.isArray(medicos.data) ? medicos.data : medicos.data.doctors || [];
-        const todosPacientes = Array.isArray(pacientes.data) ? pacientes.data : pacientes.data.patients || [];
-        const todasConsultas = Array.isArray(consultas.data) ? consultas.data : consultas.data.appointments || [];
+        const allDoctors = Array.isArray(doctors.data) ? doctors.data : doctors.data.doctors || [];
+        const allPatients = Array.isArray(patients.data) ? patients.data : patients.data.patients || [];
+        const allAppointments = Array.isArray(appointments.data) ? appointments.data : appointments.data.appointments || [];
 
-        // Calcular estatísticas
-        const hoje = new Date();
-        const hojeStr = hoje.toISOString().split('T')[0];
+        // Calculate statistics
+        const today = new Date();
+        const todayStr = today.toISOString().split('T')[0];
         
-        const consultasHoje = todasConsultas.filter((apt: any) => apt.date === hojeStr);
-        const consultasFuturas = todasConsultas.filter((apt: any) => new Date(apt.date) > hoje);
-        const consultasCompletas = todasConsultas.filter((apt: any) => apt.status === 'completed' || new Date(apt.date) < hoje);
-        const consultasCanceladas = todasConsultas.filter((apt: any) => apt.status === 'cancelled');
+        const todayAppointments = allAppointments.filter((apt: any) => apt.date === todayStr);
+        const futureAppointments = allAppointments.filter((apt: any) => new Date(apt.date) > today);
+        const completedAppointments = allAppointments.filter((apt: any) => apt.status === 'completed' || new Date(apt.date) < today);
+        const cancelledAppointments = allAppointments.filter((apt: any) => apt.status === 'cancelled');
 
-        // Especialidades mais comuns
-        const contagemEspecialidades = todosMedicos.reduce((acc: any, medico: any) => {
-          const especialidade = medico.specialty || 'Clínica Geral';
-          acc[especialidade] = (acc[especialidade] || 0) + 1;
+        // Most common specialties
+        const specialtyCount = allDoctors.reduce((acc: any, doctor: any) => {
+          const specialty = doctor.specialty || 'General Practice';
+          acc[specialty] = (acc[specialty] || 0) + 1;
           return acc;
         }, {});
 
-        const estatisticas = {
+        const statistics = {
           timestamp: new Date().toISOString(),
-          status_sistema: "operacional",
-          totais: {
-            medicos: todosMedicos.length,
-            pacientes: todosPacientes.length,
-            consultas: todasConsultas.length
+          system_status: "operational",
+          totals: {
+            doctors: allDoctors.length,
+            patients: allPatients.length,
+            appointments: allAppointments.length
           },
-          detalhamento_consultas: {
-            hoje: consultasHoje.length,
-            futuras: consultasFuturas.length,
-            completadas: consultasCompletas.length,
-            canceladas: consultasCanceladas.length
+          appointments_breakdown: {
+            today: todayAppointments.length,
+            future: futureAppointments.length,
+            completed: completedAppointments.length,
+            cancelled: cancelledAppointments.length
           },
-          especialidades: Object.entries(contagemEspecialidades)
+          specialties: Object.entries(specialtyCount)
             .sort(([,a], [,b]) => (b as number) - (a as number))
             .slice(0, 5)
-            .map(([especialidade, quantidade]) => ({ especialidade, quantidade })),
-          disponibilidade: {
-            medicos_com_consultas_hoje: consultasHoje
+            .map(([specialty, count]) => ({ specialty, count })),
+          availability: {
+            doctors_with_appointments_today: todayAppointments
               .map((apt: any) => apt.doctor_id)
               .filter((value: any, index: number, self: any[]) => self.indexOf(value) === index).length,
-            dia_mais_movimentado: getBusiestDay(todasConsultas),
-            media_consultas_por_medico: todosMedicos.length > 0 ? Math.round(todasConsultas.length / todosMedicos.length) : 0
+            busiest_day: getBusiestDay(allAppointments),
+            average_appointments_per_doctor: allDoctors.length > 0 ? Math.round(allAppointments.length / allDoctors.length) : 0
           },
-          informacoes_operacoes_crud: {
-            ferramentas_disponiveis: 13,
-            operacoes_leitura: 6,
-            operacoes_criacao: 1,
-            operacoes_atualizacao: 3,
-            operacoes_exclusao: 1,
-            operacoes_utilitarias: 2
+          crud_operations_info: {
+            available_tools: 13,
+            read_operations: 6,
+            create_operations: 1,
+            update_operations: 3,
+            delete_operations: 1,
+            utility_operations: 2
           }
         };
 
@@ -101,7 +101,7 @@ export function registerSystemResources(server: McpServer) {
             {
               uri: "system://statistics",
               mimeType: "application/json",
-              text: JSON.stringify(estatisticas, null, 2)
+              text: JSON.stringify(statistics, null, 2)
             }
           ]
         };
@@ -112,9 +112,9 @@ export function registerSystemResources(server: McpServer) {
               uri: "system://statistics",
               mimeType: "application/json",
               text: JSON.stringify({
-                erro: "Não foi possível buscar estatísticas do sistema",
+                error: "Unable to fetch system statistics",
                 timestamp: new Date().toISOString(),
-                detalhes: error instanceof Error ? error.message : "Erro desconhecido"
+                details: error instanceof Error ? error.message : "Unknown error"
               }, null, 2)
             }
           ]

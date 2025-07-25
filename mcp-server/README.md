@@ -96,13 +96,13 @@ Get all appointments for a specific doctor.
 ```
 
 #### `list-doctors`
-Lista todos os médicos com opções de paginação e filtros.
+List all doctors with pagination and filter options.
 
 **Parameters:**
-- `page` (optional): Número da página (começa em 1)
-- `limit` (optional): Quantidade de médicos por página (máximo 50)
-- `specialty` (optional): Filtrar por especialidade
-- `search` (optional): Buscar por nome ou email
+- `page` (optional): Page number (starts at 1)
+- `limit` (optional): Number of doctors per page (maximum 50)
+- `specialty` (optional): Filter by specialty
+- `search` (optional): Search by name or email
 
 **Usage:**
 ```json
@@ -117,20 +117,20 @@ Lista todos os médicos com opções de paginação e filtros.
 ```
 
 #### `update-doctor`
-Atualizar informações de um médico existente.
+Update information of an existing doctor.
 
 **Parameters:**
-- `id` (required): ID do médico a ser atualizado
-- `name` (optional): Novo nome do médico
-- `email` (optional): Novo email do médico
-- `phone` (optional): Novo telefone do médico
-- `specialty` (optional): Nova especialidade
-- `experience` (optional): Experiência profissional
-- `qualifications` (optional): Lista de qualificações
-- `languages` (optional): Idiomas falados
-- `acceptsEmergencies` (optional): Aceita emergências
-- `officeLocation` (optional): Localização do consultório
-- `address` (optional): Endereço completo
+- `id` (required): ID of the doctor to be updated
+- `name` (optional): New doctor name
+- `email` (optional): New doctor email
+- `phone` (optional): New doctor phone
+- `specialty` (optional): New specialty
+- `experience` (optional): Professional experience
+- `qualifications` (optional): List of qualifications
+- `languages` (optional): Languages spoken
+- `acceptsEmergencies` (optional): Accepts emergencies
+- `officeLocation` (optional): Office location
+- `address` (optional): Complete address
 
 **Usage:**
 ```json
@@ -171,13 +171,13 @@ Get all appointments for a specific patient.
 - `date` (optional): Date filter in YYYY-MM-DD format
 
 #### `list-patients`
-Lista todos os pacientes com opções de paginação e filtros.
+List all patients with pagination and filter options.
 
 **Parameters:**
-- `page` (optional): Número da página (começa em 1)
-- `limit` (optional): Quantidade de pacientes por página (máximo 50)
-- `search` (optional): Buscar por nome, email ou telefone
-- `ageRange` (optional): Filtrar por faixa etária (ex: '18-65')
+- `page` (optional): Page number (starts at 1)
+- `limit` (optional): Number of patients per page (maximum 50)
+- `search` (optional): Search by name, email or phone
+- `ageRange` (optional): Filter by age range (ex: '18-65')
 
 **Usage:**
 ```json
@@ -192,20 +192,20 @@ Lista todos os pacientes com opções de paginação e filtros.
 ```
 
 #### `update-patient`
-Atualizar informações de um paciente existente.
+Update information of an existing patient.
 
 **Parameters:**
-- `id` (required): ID do paciente a ser atualizado
-- `name` (optional): Novo nome do paciente
-- `email` (optional): Novo email do paciente
-- `phone` (optional): Novo telefone do paciente
-- `birthDate` (optional): Nova data de nascimento (YYYY-MM-DD)
-- `address` (optional): Novo endereço completo
-- `emergencyContact` (optional): Contato de emergência
-- `emergencyPhone` (optional): Telefone do contato de emergência
-- `allergies` (optional): Lista de alergias
-- `medications` (optional): Medicações em uso
-- `medicalHistory` (optional): Histórico médico relevante
+- `id` (required): ID of the patient to be updated
+- `name` (optional): New patient name
+- `email` (optional): New patient email
+- `phone` (optional): New patient phone
+- `birthDate` (optional): New birth date (YYYY-MM-DD)
+- `address` (optional): New complete address
+- `emergencyContact` (optional): Emergency contact
+- `emergencyPhone` (optional): Emergency contact phone
+- `allergies` (optional): List of allergies
+- `medications` (optional): Medications in use
+- `medicalHistory` (optional): Relevant medical history
 
 **Usage:**
 ```json
@@ -214,7 +214,7 @@ Atualizar informações de um paciente existente.
   "arguments": {
     "id": "1",
     "phone": "+55 11 99999-9999",
-    "address": "Nova rua, 123"
+    "address": "New Street, 123"
   }
 }
 ```
@@ -269,16 +269,16 @@ Get the current date and time in São Paulo timezone.
 **Returns:** Current date, time, and timezone information
 
 #### `update-appointment`
-Atualizar uma consulta existente com validações de conflito.
+Update an existing appointment with conflict validation.
 
 **Parameters:**
-- `id` (required): ID da consulta a ser atualizada
-- `patientId` (optional): Novo ID do paciente
-- `doctorId` (optional): Novo ID do médico
-- `date` (optional): Nova data da consulta (YYYY-MM-DD)
-- `time` (optional): Novo horário da consulta
-- `notes` (optional): Notas adicionais sobre a consulta
-- `status` (optional): Status da consulta (scheduled, confirmed, cancelled, completed)
+- `id` (required): ID of the appointment to be updated
+- `patientId` (optional): New patient ID
+- `doctorId` (optional): New doctor ID
+- `date` (optional): New appointment date (YYYY-MM-DD)
+- `time` (optional): New appointment time
+- `notes` (optional): Additional notes about the appointment
+- `status` (optional): Appointment status (scheduled, confirmed, cancelled, completed)
 
 **Usage:**
 ```json
@@ -293,18 +293,18 @@ Atualizar uma consulta existente com validações de conflito.
 ```
 
 #### `delete-appointment`
-Cancelar/excluir uma consulta com validação apropriada.
+Cancel/delete an appointment with appropriate validation.
 
 **Parameters:**
-- `id` (required): ID da consulta a ser cancelada
-- `reason` (optional): Motivo do cancelamento
-- `softDelete` (optional): Se true, apenas marca como cancelada. Se false, exclui permanentemente
+- `id` (required): ID of the appointment to be cancelled
+- `reason` (optional): Cancellation reason
+- `softDelete` (optional): If true, only marks as cancelled. If false, permanently deletes
 
 **Features:**
-- Validação de antecedência mínima de 2 horas
-- Soft delete por padrão (marca como cancelada)
-- Hard delete para exclusão permanente
-- Registro do motivo do cancelamento
+- Minimum 2-hour advance validation
+- Soft delete by default (marks as cancelled)
+- Hard delete for permanent deletion
+- Registration of cancellation reason
 
 **Usage:**
 ```json
@@ -312,7 +312,7 @@ Cancelar/excluir uma consulta com validação apropriada.
   "name": "delete-appointment",
   "arguments": {
     "id": "123",
-    "reason": "Paciente solicitou cancelamento",
+    "reason": "Patient requested cancellation",
     "softDelete": true
   }
 }
@@ -431,10 +431,10 @@ Pre-configured schedule patterns for different practice types.
 ```
 
 ### CRUD Operations Guide
-Guia completo de todas as operações CRUD disponíveis.
+Complete guide for all available CRUD operations.
 
 **Available Resource:**
-- `crud-operations://guide` - Guia completo com exemplos e melhores práticas
+- `crud-operations://guide` - Complete guide with examples and best practices
 
 **Guide Structure:**
 ```json
@@ -458,18 +458,18 @@ Guia completo de todas as operações CRUD disponíveis.
     }
   },
   "best_practices": [
-    "Sempre use paginação ao listar grandes volumes de dados",
-    "Verifique disponibilidade antes de criar/atualizar consultas",
-    "Use soft delete (cancelamento) em vez de exclusão permanente"
+    "Always use pagination when listing large volumes of data",
+    "Check availability before creating/updating appointments",
+    "Use soft delete (cancellation) instead of permanent deletion"
   ]
 }
 ```
 
 ### System Statistics
-Estatísticas em tempo real do sistema de consultas.
+Real-time statistics of the appointment system.
 
 **Available Resource:**
-- `system://statistics` - Estatísticas atualizadas em tempo real
+- `system://statistics` - Real-time updated statistics
 
 **Statistics Structure:**
 ```json

@@ -65,12 +65,12 @@ export function registerPatientTool(server: McpServer) {
 
     server.tool(
         "list-patients",
-        "Lista todos os pacientes com opções de paginação e filtros",
+        "List all patients with pagination and filter options",
         {
-          page: z.number().optional().describe("Número da página (começa em 1)"),
-          limit: z.number().optional().describe("Quantidade de pacientes por página (máximo 50)"),
-          search: z.string().optional().describe("Buscar por nome, email ou telefone"),
-          ageRange: z.string().optional().describe("Filtrar por faixa etária (ex: '18-65')"),
+          page: z.number().optional().describe("Page number (starts at 1)"),
+          limit: z.number().optional().describe("Number of patients per page (maximum 50)"),
+          search: z.string().optional().describe("Search by name, email or phone"),
+          ageRange: z.string().optional().describe("Filter by age range (e.g.: '18-65')"),
         },
         async ({ page = 1, limit = 20, search, ageRange }) => {
           // Validar limites
@@ -86,10 +86,10 @@ export function registerPatientTool(server: McpServer) {
             },
           });
 
-          // Se a API não suporta paginação nativa, implementar do lado cliente
+          // If API doesn't support native pagination, implement client-side
           let patients = Array.isArray(data) ? data : data.patients || [];
           
-          // Aplicar filtro de busca se necessário
+          // Apply search filter if necessary
           if (search) {
             patients = patients.filter((patient: any) => 
               patient.name?.toLowerCase().includes(search.toLowerCase()) ||
@@ -98,7 +98,7 @@ export function registerPatientTool(server: McpServer) {
             );
           }
 
-          // Aplicar filtro de idade se necessário
+          // Apply age filter if necessary
           if (ageRange) {
             const [minAge, maxAge] = ageRange.split('-').map(Number);
             patients = patients.filter((patient: any) => {
@@ -110,7 +110,7 @@ export function registerPatientTool(server: McpServer) {
             });
           }
 
-          // Aplicar paginação
+          // Apply pagination
           const startIndex = (page - 1) * limit;
           const endIndex = startIndex + limit;
           const paginatedPatients = patients.slice(startIndex, endIndex);
@@ -147,41 +147,41 @@ export function registerPatientTool(server: McpServer) {
 
     server.tool(
         "update-patient",
-        "Atualizar informações de um paciente existente",
+        "Update information of an existing patient",
         {
-          id: z.string().describe("ID do paciente a ser atualizado"),
-          name: z.string().optional().describe("Novo nome do paciente"),
-          email: z.string().optional().describe("Novo email do paciente"),
-          phone: z.string().optional().describe("Novo telefone do paciente"),
-          birthDate: z.string().optional().describe("Nova data de nascimento (YYYY-MM-DD)"),
-          address: z.string().optional().describe("Novo endereço completo"),
-          emergencyContact: z.string().optional().describe("Contato de emergência"),
-          emergencyPhone: z.string().optional().describe("Telefone do contato de emergência"),
-          allergies: z.array(z.string()).optional().describe("Lista de alergias"),
-          medications: z.array(z.string()).optional().describe("Medicações em uso"),
-          medicalHistory: z.string().optional().describe("Histórico médico relevante"),
+          id: z.string().describe("ID of the patient to be updated"),
+          name: z.string().optional().describe("New patient name"),
+          email: z.string().optional().describe("New patient email"),
+          phone: z.string().optional().describe("New patient phone"),
+          birthDate: z.string().optional().describe("New birth date (YYYY-MM-DD)"),
+          address: z.string().optional().describe("New complete address"),
+          emergencyContact: z.string().optional().describe("Emergency contact"),
+          emergencyPhone: z.string().optional().describe("Emergency contact phone"),
+          allergies: z.array(z.string()).optional().describe("List of allergies"),
+          medications: z.array(z.string()).optional().describe("Medications in use"),
+          medicalHistory: z.string().optional().describe("Relevant medical history"),
         },
         async (params) => {
           const { id, ...updateData } = params;
 
           try {
-            // Remover campos undefined para não enviar à API
+            // Remove undefined fields to not send to API
             const cleanData = Object.fromEntries(
               Object.entries(updateData).filter(([_, value]) => value !== undefined)
             );
 
             if (Object.keys(cleanData).length === 0) {
-              throw new Error("Nenhum campo para atualizar foi fornecido");
+              throw new Error("No fields to update were provided");
             }
 
-            // Validar data de nascimento se fornecida
+            // Validate birth date if provided
             if (cleanData.birthDate && typeof cleanData.birthDate === 'string') {
               const birthDate = new Date(cleanData.birthDate);
               if (isNaN(birthDate.getTime())) {
-                throw new Error("Data de nascimento inválida. Use o formato YYYY-MM-DD");
+                throw new Error("Invalid birth date. Use YYYY-MM-DD format");
               }
               if (birthDate > new Date()) {
-                throw new Error("Data de nascimento não pode ser no futuro");
+                throw new Error("Birth date cannot be in the future");
               }
             }
 

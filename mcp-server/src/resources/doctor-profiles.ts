@@ -2,7 +2,7 @@ import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mc
 import { apiClient } from "../lib/api-client.js";
 
 export function registerDoctorProfileResources(server: McpServer) {
-  // Template para perfis dinâmicos de médicos
+  // Template for dynamic doctor profiles
   const doctorProfileTemplate = new ResourceTemplate(
     "doctor-profiles://{doctor_id}",
     {
@@ -11,21 +11,21 @@ export function registerDoctorProfileResources(server: McpServer) {
           const doctors = await apiClient.get('/doctors');
           const resources = doctors.data.map((doctor: any) => ({
             uri: `doctor-profiles://${doctor.id}`,
-            name: `Perfil Dr. ${doctor.name}`,
-            description: `Perfil completo do Dr. ${doctor.name} incluindo especialidades e horários`,
+            name: `Dr. ${doctor.name} Profile`,
+            description: `Complete profile of Dr. ${doctor.name} including specialties and schedules`,
             mimeType: "application/json"
           }));
 
           resources.unshift({
             uri: "doctor-profiles://all", 
-            name: "Todos os Perfis de Médicos",
-            description: "Perfis completos de todos os médicos no sistema",
+            name: "All Doctor Profiles",
+            description: "Complete profiles of all doctors in the system",
             mimeType: "application/json"
           });
 
           return { resources };
         } catch (error) {
-          console.error('Erro ao buscar médicos para recursos:', error);
+          console.error('Error fetching doctors for resources:', error);
           return { resources: [] };
         }
       }
@@ -33,9 +33,9 @@ export function registerDoctorProfileResources(server: McpServer) {
   );
 
   server.resource(
-    "Perfis de Médicos",
+    "Doctor Profiles",
     doctorProfileTemplate,
-    { description: "Recursos dinâmicos de perfis de médicos" },
+    { description: "Dynamic doctor profile resources" },
     async (uri: URL, variables: any) => {
       try {
         if (uri.pathname === "/all") {
@@ -43,28 +43,28 @@ export function registerDoctorProfileResources(server: McpServer) {
           
           const profiles = doctors.data.map((doctor: any) => ({
             id: doctor.id,
-            nome: doctor.name,
+            name: doctor.name,
             email: doctor.email,
-            telefone: doctor.phone,
-            especialidade: doctor.specialty || 'Clínica Geral',
-            qualificacoes: doctor.qualifications || [],
-            experiencia: doctor.experience || 'Não especificado',
-            idiomas: doctor.languages || ['Português'],
-            horarios: {
-              segunda: doctor.monday_schedule || '9:00-17:00',
-              terca: doctor.tuesday_schedule || '9:00-17:00',
-              quarta: doctor.wednesday_schedule || '9:00-17:00',
-              quinta: doctor.thursday_schedule || '9:00-17:00', 
-              sexta: doctor.friday_schedule || '9:00-17:00',
-              sabado: doctor.saturday_schedule || 'Fechado',
-              domingo: doctor.sunday_schedule || 'Fechado'
+            phone: doctor.phone,
+            specialty: doctor.specialty || 'General Practice',
+            qualifications: doctor.qualifications || [],
+            experience: doctor.experience || 'Not specified',
+            languages: doctor.languages || ['Portuguese'],
+            schedules: {
+              monday: doctor.monday_schedule || '9:00-17:00',
+              tuesday: doctor.tuesday_schedule || '9:00-17:00',
+              wednesday: doctor.wednesday_schedule || '9:00-17:00',
+              thursday: doctor.thursday_schedule || '9:00-17:00', 
+              friday: doctor.friday_schedule || '9:00-17:00',
+              saturday: doctor.saturday_schedule || 'Closed',
+              sunday: doctor.sunday_schedule || 'Closed'
             },
-            tipos_consulta: ['consulta', 'checkup', 'retorno'],
-            tempo_medio_consulta: 30,
-            aceita_emergencias: doctor.accepts_emergencies || false,
-            informacoes_localizacao: {
-              consultorio: doctor.office_location || 'Consultório Principal',
-              endereco: doctor.address || 'Não especificado'
+            appointment_types: ['consultation', 'checkup', 'followup'],
+            average_appointment_time: 30,
+            accepts_emergencies: doctor.accepts_emergencies || false,
+            location_info: {
+              office: doctor.office_location || 'Main Office',
+              address: doctor.address || 'Not specified'
             }
           }));
 
@@ -73,45 +73,45 @@ export function registerDoctorProfileResources(server: McpServer) {
               {
                 uri: uri.href,
                 mimeType: "application/json",
-                text: JSON.stringify({ medicos: profiles }, null, 2)
+                text: JSON.stringify({ doctors: profiles }, null, 2)
               }
             ]
           };
         }
 
-        // Lidar com perfil individual de médico  
+        // Handle individual doctor profile  
         const doctorId = variables.doctor_id;
         const doctor = await apiClient.get(`/doctors/${doctorId}`);
         
         const profile = {
           id: doctor.data.id,
-          nome: doctor.data.name,
+          name: doctor.data.name,
           email: doctor.data.email,
-          telefone: doctor.data.phone,
-          especialidade: doctor.data.specialty || 'Clínica Geral',
-          qualificacoes: doctor.data.qualifications || [],
-          experiencia: doctor.data.experience || 'Não especificado',
-          idiomas: doctor.data.languages || ['Português'],
-          horarios: {
-            segunda: doctor.data.monday_schedule || '9:00-17:00',
-            terca: doctor.data.tuesday_schedule || '9:00-17:00',
-            quarta: doctor.data.wednesday_schedule || '9:00-17:00',
-            quinta: doctor.data.thursday_schedule || '9:00-17:00',
-            sexta: doctor.data.friday_schedule || '9:00-17:00',
-            sabado: doctor.data.saturday_schedule || 'Fechado',
-            domingo: doctor.data.sunday_schedule || 'Fechado'
+          phone: doctor.data.phone,
+          specialty: doctor.data.specialty || 'General Practice',
+          qualifications: doctor.data.qualifications || [],
+          experience: doctor.data.experience || 'Not specified',
+          languages: doctor.data.languages || ['Portuguese'],
+          schedules: {
+            monday: doctor.data.monday_schedule || '9:00-17:00',
+            tuesday: doctor.data.tuesday_schedule || '9:00-17:00',
+            wednesday: doctor.data.wednesday_schedule || '9:00-17:00',
+            thursday: doctor.data.thursday_schedule || '9:00-17:00',
+            friday: doctor.data.friday_schedule || '9:00-17:00',
+            saturday: doctor.data.saturday_schedule || 'Closed',
+            sunday: doctor.data.sunday_schedule || 'Closed'
           },
-          tipos_consulta: ['consulta', 'checkup', 'retorno'],
-          tempo_medio_consulta: 30,
-          aceita_emergencias: doctor.data.accepts_emergencies || false,
-          informacoes_localizacao: {
-            consultorio: doctor.data.office_location || 'Consultório Principal',
-            endereco: doctor.data.address || 'Não especificado'
+          appointment_types: ['consultation', 'checkup', 'followup'],
+          average_appointment_time: 30,
+          accepts_emergencies: doctor.data.accepts_emergencies || false,
+          location_info: {
+            office: doctor.data.office_location || 'Main Office',
+            address: doctor.data.address || 'Not specified'
           },
-          estatisticas: {
-            total_consultas: doctor.data.total_appointments || 0,
-            consultas_futuras: doctor.data.upcoming_appointments || 0,
-            avaliacao: doctor.data.rating || 'Não avaliado'
+          statistics: {
+            total_appointments: doctor.data.total_appointments || 0,
+            upcoming_appointments: doctor.data.upcoming_appointments || 0,
+            rating: doctor.data.rating || 'Not rated'
           }
         };
 
@@ -126,8 +126,8 @@ export function registerDoctorProfileResources(server: McpServer) {
         };
 
       } catch (error) {
-        console.error('Erro ao ler recurso de perfil de médico:', error);
-        throw new Error(`Falha ao ler perfil de médico: ${uri.href}`);
+        console.error('Error reading doctor profile resource:', error);
+        throw new Error(`Failed to read doctor profile: ${uri.href}`);
       }
     }
   );

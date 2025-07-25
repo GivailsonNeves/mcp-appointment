@@ -3,16 +3,16 @@ import { z } from 'zod';
 export const formSchema = z
   .object({
     date: z.date({
-      required_error: 'A data é obrigatória.',
+      required_error: 'Date is required.',
     }),
     time: z
       .string()
-      .min(1, { message: 'O horário é obrigatório.' })
+      .min(1, { message: 'Time is required.' })
       .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
-        message: 'Hora deve estar no formato HH:mm.',
+        message: 'Time must be in HH:mm format.',
       }),
-    doctorId: z.string().min(1, { message: 'Selecione um médico' }),
-    patientId: z.string().min(1, { message: 'Selecione um paciente' }),
+    doctorId: z.string().min(1, { message: 'Select a doctor' }),
+    patientId: z.string().min(1, { message: 'Select a patient' }),
   })
   .superRefine((data, ctx) => {
     const { date, time } = data;
@@ -32,7 +32,7 @@ export const formSchema = z
     if (appointmentDateTime < now) {
       ctx.addIssue({
         code: 'custom',
-        message: 'Não é possível agendar um horário no passado.',
+        message: 'Cannot schedule an appointment in the past.',
         path: ['time'],
       });
     }

@@ -50,7 +50,7 @@ export function FormData({ onSubmit, onCancel, data, loading }: Props) {
             <DatePickerField
               control={form.control}
               name="date"
-              placeholder="Escolha uma data"
+              placeholder="Choose a date"
             />
           </div>
           <div className="col">

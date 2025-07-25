@@ -3,7 +3,7 @@ import { apiClient } from "../lib/api-client.js";
 import { getFrequentDoctors, getAppointmentTypes, calculateAverageInterval } from "./utils/analysis-helpers.js";
 
 export function registerPatientHistoryResources(server: McpServer) {
-  // Template para histórico dinâmico de pacientes
+  // Template for dynamic patient history
   const patientHistoryTemplate = new ResourceTemplate(
     "patient-history://{patient_id}",
     {
@@ -12,21 +12,21 @@ export function registerPatientHistoryResources(server: McpServer) {
           const patients = await apiClient.get('/patients');
           const resources = patients.data.map((patient: any) => ({
             uri: `patient-history://${patient.id}`,
-            name: `Histórico Médico de ${patient.name}`,
-            description: `Histórico completo de consultas de ${patient.name}`,
+            name: `Medical History of ${patient.name}`,
+            description: `Complete appointment history of ${patient.name}`,
             mimeType: "application/json"
           }));
 
           resources.unshift({
             uri: "patient-history://all",
-            name: "Todos os Históricos de Pacientes",
-            description: "Históricos completos de consultas de todos os pacientes",
+            name: "All Patient Histories",
+            description: "Complete appointment histories of all patients",
             mimeType: "application/json"
           });
 
           return { resources };
         } catch (error) {
-          console.error('Erro ao buscar pacientes para recursos:', error);
+          console.error('Error fetching patients for resources:', error);
           return { resources: [] };
         }
       }
@@ -34,9 +34,9 @@ export function registerPatientHistoryResources(server: McpServer) {
   );
 
   server.resource(
-    "Histórico de Pacientes",
+    "Patient History",
     patientHistoryTemplate,
-    { description: "Recursos dinâmicos de histórico de pacientes" },
+    { description: "Dynamic patient history resources" },
     async (uri: URL, variables: any) => {
       try {
         if (uri.pathname === "/all") {
@@ -45,39 +45,39 @@ export function registerPatientHistoryResources(server: McpServer) {
             apiClient.get('/appointments')
           ]);
           
-          const pacientesHistoricos = patients.data.map((patient: any) => {
-            const consultasPaciente = appointments.data.filter(
+          const patientHistories = patients.data.map((patient: any) => {
+            const patientAppointments = appointments.data.filter(
               (apt: any) => apt.patient_id === patient.id
             );
             
-            const consultasOrdenadas = consultasPaciente.sort(
+            const sortedAppointments = patientAppointments.sort(
               (a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()
             );
 
             return {
-              id_paciente: patient.id,
-              nome_paciente: patient.name,
-              email_paciente: patient.email,
-              telefone_paciente: patient.phone,
-              total_consultas: consultasPaciente.length,
-              consultas: consultasOrdenadas.map((apt: any) => ({
+              patient_id: patient.id,
+              patient_name: patient.name,
+              patient_email: patient.email,
+              patient_phone: patient.phone,
+              total_appointments: patientAppointments.length,
+              appointments: sortedAppointments.map((apt: any) => ({
                 id: apt.id,
-                data: apt.date,
-                horario: apt.time,
-                id_medico: apt.doctor_id,
-                nome_medico: apt.doctor_name,
-                tipo: apt.type || 'consulta',
-                status: apt.status || 'completada',
-                observacoes: apt.notes || '',
-                duracao: apt.duration || 30,
-                criada_em: apt.created_at
+                date: apt.date,
+                time: apt.time,
+                doctor_id: apt.doctor_id,
+                doctor_name: apt.doctor_name,
+                type: apt.type || 'consultation',
+                status: apt.status || 'completed',
+                notes: apt.notes || '',
+                duration: apt.duration || 30,
+                created_at: apt.created_at
               })),
-              resumo: {
-                primeira_consulta: consultasOrdenadas[consultasOrdenadas.length - 1]?.date,
-                ultima_consulta: consultasOrdenadas[0]?.date,
-                medicos_frequentes: getFrequentDoctors(consultasPaciente),
-                tipos_consulta: getAppointmentTypes(consultasPaciente),
-                intervalo_medio: calculateAverageInterval(consultasOrdenadas)
+              summary: {
+                first_appointment: sortedAppointments[sortedAppointments.length - 1]?.date,
+                last_appointment: sortedAppointments[0]?.date,
+                frequent_doctors: getFrequentDoctors(patientAppointments),
+                appointment_types: getAppointmentTypes(patientAppointments),
+                average_interval: calculateAverageInterval(sortedAppointments)
               }
             };
           });
@@ -87,7 +87,7 @@ export function registerPatientHistoryResources(server: McpServer) {
               {
                 uri: uri.href,
                 mimeType: "application/json",
-                text: JSON.stringify({ historicos_pacientes: pacientesHistoricos }, null, 2)
+                text: JSON.stringify({ patient_histories: patientHistories }, null, 2)
               }
             ]
           };
