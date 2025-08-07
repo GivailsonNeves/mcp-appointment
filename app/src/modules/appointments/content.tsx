@@ -5,13 +5,17 @@ import { Button } from "@/components/ui/button";
 import { useNavigation } from "@/hooks/useNavigation";
 import { useModal } from "@/providers/modal-provider";
 import { queryClient } from "@/providers/query-provider";
-import { addAppointment } from "@/services";
 import { SectionTitle } from "@/ui/section-title";
 import { useMutation } from "@tanstack/react-query";
 import React from "react";
 import { Selector as DoctorSelector } from "../doctors/selector";
 import { List } from "./list";
 import { ModalForm } from "./modal-form";
+import { FormType } from "./form";
+import {
+  createAppointmentAction,
+  updateAppointmentAction,
+} from "./actions";
 
 type Props = {
   doctor?: string;
@@ -24,30 +28,29 @@ export function Content({ doctor, date }: Props) {
   const [open, setOpen] = React.useState(false);
 
   const { mutate } = useMutation({
-    mutationFn: async (data: any) => {
-      return addAppointment({
-        date: data.date,
-        time: data.time,
-        doctorId: data.doctorId,
-        patientId: data.patientId,
-      });
+    mutationFn: async (data: FormType & { id?: string }) => {
+      if (data.id) {
+        return updateAppointmentAction(data.id, data);
+      }
+
+      return createAppointmentAction(data);
     },
-    onSuccess: () => {
-      alert("Appointment created successfully!");
+    onSuccess: (data) => {
+      alert(`Appointment ${data.id ? "updated" : "created"} successfully!`);
     },
     onError: (error) => {
       alert(`Error creating appointment: ${error.message}`);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["appointments"] });
+      showLoading(false);
+      hideModal();
     },
   });
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: FormType & { id?: string }) => {
     showLoading(true);
     await mutate(data);
-    showLoading(false);
-    hideModal();
   };
 
   const handleDateChange = (newDate: Date) => {
@@ -107,7 +110,7 @@ export function Content({ doctor, date }: Props) {
             onClose: hideModal,
           });
         }}
-        onDelete={(data) => {
+        onDelete={() => {
           showModal(ModalConfirm, {
             title: "Confirm Deletion",
             description:

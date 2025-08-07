@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 export default async function AppointmentsPage({
   searchParams,
 }: {
-  searchParams: { date?: string; doctor?: string; noCache?: string };
+  searchParams: Promise<{ date?: string; doctor?: string; noCache?: string }>;
 }) {
   const { date, doctor, noCache } = await searchParams;
 

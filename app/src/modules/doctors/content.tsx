@@ -50,8 +50,7 @@ export function Content() {
         </Button>
       </SectionTitle>
       <List
-        onEdit={(data) => {}}
-        onDelete={(data) => {
+        onDelete={() => {
           showModal(ModalConfirm, {
             title: "Confirm Deletion",
             description: "Are you sure you want to delete this doctor?",

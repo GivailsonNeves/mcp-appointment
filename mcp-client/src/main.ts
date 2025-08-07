@@ -10,9 +10,6 @@ dotenv.config();
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
 async function main() {
-  if (!ANTHROPIC_API_KEY) {
-    throw new Error("ANTHROPIC_API_KEY is not set");
-  }
 
   console.log(process.env.MCP_SERVER_PATH);
   if (process.argv.length < 3 && !process.env.MCP_SERVER_PATH) {

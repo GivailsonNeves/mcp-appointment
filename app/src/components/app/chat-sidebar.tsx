@@ -16,6 +16,7 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Spinner } from "../ui/spinner";
+import { ApiKeyInput } from "./api-key-input";
 
 const DEFAULT_MESSAGES = [
   {
@@ -112,37 +113,37 @@ export function ChatSidebar({
                         <ReactMarkdown
                           remarkPlugins={[remarkGfm]}
                           components={{
-                            h1: ({ node, ...props }) => (
+                            h1: ({ ...props }) => (
                               <h1 {...props} className="text-xl font-bold" />
                             ),
-                            h2: ({ node, ...props }) => (
+                            h2: ({ ...props }) => (
                               <h2
                                 {...props}
                                 className="text-lg font-bold mt-2"
                               />
                             ),
-                            h3: ({ node, ...props }) => (
+                            h3: ({ ...props }) => (
                               <h3
                                 {...props}
                                 className="text-base font-bold mt-2"
                               />
                             ),
-                            ul: ({ node, ...props }) => (
+                            ul: ({ ...props }) => (
                               <ul {...props} className="list-disc pl-5" />
                             ),
-                            ol: ({ node, ...props }) => (
+                            ol: ({ ...props }) => (
                               <ol {...props} className="list-decimal pl-5" />
                             ),
-                            p: ({ node, ...props }) => (
+                            p: ({ ...props }) => (
                               <p {...props} className="mb-2" />
                             ),
-                            a: ({ node, ...props }) => (
+                            a: ({ ...props }) => (
                               <a
                                 {...props}
                                 className="text-blue-500 hover:underline"
                               />
                             ),
-                            strong: ({ node, ...props }) => (
+                            strong: ({ ...props }) => (
                               <strong {...props} className="font-bold" />
                             ),
                           }}
@@ -168,6 +169,8 @@ export function ChatSidebar({
                   />
                   <Label htmlFor="interactive-mode" className="text-sm">Interactive Mode</Label>
                 </div>
+
+                <ApiKeyInput />
 
                 <div className="flex items-center gap-2">
                   <Input

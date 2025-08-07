@@ -18,7 +18,7 @@ type Props = {
 export function ModalForm({ onSubmit, onClose, data }: Props) {
   const { loading } = useModal();
   return (
-    <Dialog open={true} onOpenChange={(_) => onClose()}>
+    <Dialog open={true} onOpenChange={() => onClose()}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>

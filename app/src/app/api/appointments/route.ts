@@ -1,4 +1,4 @@
-import { createAppointment, getAllAppointments, getAppointmentById, getAppointmentByPatientId } from "@/api-services/appointment.service";
+import { createAppointment, getAllAppointments } from "@/api-services/appointment.service";
 import { getDoctorById } from "@/api-services/doctor.service";
 import { getPatientById } from "@/api-services/patient.service";
 import { NextRequest } from "next/server";
@@ -15,8 +15,8 @@ export async function POST(req: NextRequest) {
     return new Response("Doctor not found", { status: 404 });
   }
 
-  const patien = getPatientById(body.patientId);
-  if (!patien) {
+  const patient = await getPatientById(body.patientId);
+  if (!patient) {
     return new Response("Patient not found", { status: 404 });
   }
 

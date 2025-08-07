@@ -5,6 +5,7 @@ import { useNavigation } from "@/hooks/useNavigation";
 import { sendQuery } from "@/services";
 import { useMutation } from "@tanstack/react-query";
 import { createContext, ReactNode, useContext, useState } from "react";
+import { useApiKey } from "./api-key-provider";
 
 type ChatContextType = {
   show: () => void;
@@ -26,12 +27,14 @@ export const ChatProviderProvider = ({ children }: { children: ReactNode }) => {
   const [history, setHistory] = useState<MessageParam[] | undefined>(undefined);
 
   const { processInteraction } = useNavigation();
+  const { apiKey } = useApiKey();
 
   const { mutate, isPending } = useMutation({
     mutationFn: (query: string) =>
       sendQuery({
         query,
         history,
+        apiKey,
       }),
     onSuccess: (data: MessageParam[]) => {
       if (data.length && data.at(-1)) {

@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { apiClient } from "../lib/api-client.js";
-import { getBusiestDay } from "./utils/analysis-helpers.js";
+import { apiClient } from "../lib/api-client";
+import { getBusiestDay } from "./utils/analysis-helpers";
 import * as fs from 'fs';
 import * as path from 'path';
 

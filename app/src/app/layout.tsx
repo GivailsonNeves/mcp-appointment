@@ -6,6 +6,7 @@ import { MainFooter } from "@/components/app/main-footer";
 import { MainMenu } from "@/components/app/main-menu";
 import { ModalProvider } from "@/providers/modal-provider";
 import { ChatProviderProvider } from "@/providers/chat-provider";
+import { ApiKeyProvider } from "@/providers/api-key-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,10 +37,12 @@ export default function RootLayout({
         <main className="p-5 ">
           <QueryProvider>
             <ModalProvider>
-              <ChatProviderProvider>
-                {children}
-                <MainFooter />
-              </ChatProviderProvider>
+              <ApiKeyProvider>
+                <ChatProviderProvider>
+                  {children}
+                  <MainFooter />
+                </ChatProviderProvider>
+              </ApiKeyProvider>
             </ModalProvider>
           </QueryProvider>
         </main>

@@ -1,4 +1,3 @@
-// components/DatePickerField.tsx
 
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
@@ -16,12 +15,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { ControllerRenderProps, FieldValues } from "react-hook-form";
+import { Control, ControllerRenderProps, FieldValues } from "react-hook-form";
 import React from "react";
 import { cn } from "@/lib/utils";
 
 type DatePickerFieldProps<T extends FieldValues> = {
-  control: any;
+  control: Control<T>;
   name: string;
   label?: string;
   placeholder?: string;

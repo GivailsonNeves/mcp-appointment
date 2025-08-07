@@ -40,8 +40,7 @@ export function FormData({ onSubmit, onCancel, data, loading }: Props) {
           onSubmit({
             ...d,
             id: data?.id,
-            //@ts-ignore
-            date: d.date?.toISOString().split("T")[0],
+            date: new Date(d.date?.toISOString().split("T")[0]),
           })
         )}
       >
@@ -57,7 +56,7 @@ export function FormData({ onSubmit, onCancel, data, loading }: Props) {
             <FormField
               control={form.control}
               name="doctorId"
-              render={({ field }) => (
+              render={() => (
                 <FormItem>
                   <FormControl>
                     <DoctorSelector
@@ -76,7 +75,7 @@ export function FormData({ onSubmit, onCancel, data, loading }: Props) {
             <FormField
               control={form.control}
               name="patientId"
-              render={({ field }) => (
+              render={() => (
                 <FormItem>
                   <FormControl>
                     <PatientSelector
@@ -93,7 +92,7 @@ export function FormData({ onSubmit, onCancel, data, loading }: Props) {
             <FormField
               control={form.control}
               name="time"
-              render={({ field }) => (
+              render={() => (
                 <FormItem>
                   <FormControl>
                     <TimeSelector

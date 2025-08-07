@@ -1,5 +1,5 @@
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { apiClient } from "../lib/api-client.js";
+import { apiClient } from "../lib/api-client";
 
 export function registerDoctorProfileResources(server: McpServer) {
   // Template for dynamic doctor profiles

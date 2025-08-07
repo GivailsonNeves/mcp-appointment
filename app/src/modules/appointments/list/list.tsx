@@ -15,7 +15,7 @@ export function List({doctor, date, ...props}: Props) {
   
   const { data, isLoading } = useQuery({
     queryKey: ["appointments", doctor, date],
-    queryFn: () => listAppointments({ doctorId: doctor, date }),
+        queryFn: () => listAppointments({ doctorId: doctor, date: date ? new Date(date) : undefined }),
     refetchOnWindowFocus: true,
     retry: 3,
   });

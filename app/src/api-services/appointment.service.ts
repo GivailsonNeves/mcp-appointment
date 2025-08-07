@@ -109,7 +109,7 @@ export async function getAllAppointments(
   }
 
   try {
-    let snapshot = await db.collection(COLLECTION_NAME).get();
+    const snapshot = await db.collection(COLLECTION_NAME).get();
     if (snapshot.empty) {
       return [];
     }
@@ -164,6 +164,31 @@ export async function createAppointment(patientData: {
   } catch (error) {
     console.error("Error creating appointment:", error);
     throw new Error("Error creating appointment");
+  }
+}
+
+export async function updateAppointment(
+  appointmentId: string,
+  appointmentData: {
+    patientId: string;
+    date: string;
+    time: string;
+    doctorId: string;
+  }
+) {
+  if (!db) {
+    throw new Error("Database not initialized");
+  }
+
+  try {
+    await db
+      .collection(COLLECTION_NAME)
+      .doc(appointmentId)
+      .update(appointmentData);
+    return { id: appointmentId, ...appointmentData };
+  } catch (error) {
+    console.error("Error updating appointment:", error);
+    throw new Error("Error updating appointment");
   }
 }
 

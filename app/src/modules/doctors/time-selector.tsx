@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { listAvailability, listDoctors } from "@/services";
+import { listAvailability } from "@/services";
 import { useQuery } from "@tanstack/react-query";
 
 export const TimeSelector = ({
@@ -18,13 +18,12 @@ export const TimeSelector = ({
   onChange,
 }: {
   time?: string;
-  date?: string;
-  doctorId?: string;
+  date: string;
+  doctorId: string;
   onChange?: (time: string) => void;
 }) => {
   const { data, isLoading } = useQuery({
     queryKey: ["timers", doctorId],
-    //@ts-ignore
     queryFn: () => listAvailability({ doctorId, date: new Date(date) }),
     refetchOnWindowFocus: false,
     enabled: !!doctorId && !!date,

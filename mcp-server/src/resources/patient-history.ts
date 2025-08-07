@@ -1,6 +1,6 @@
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { apiClient } from "../lib/api-client.js";
-import { getFrequentDoctors, getAppointmentTypes, calculateAverageInterval } from "./utils/analysis-helpers.js";
+import { apiClient } from "../lib/api-client";
+import { getFrequentDoctors, getAppointmentTypes, calculateAverageInterval } from "./utils/analysis-helpers";
 
 export function registerPatientHistoryResources(server: McpServer) {
   // Template for dynamic patient history

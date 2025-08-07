@@ -5,7 +5,6 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { searchParams } = new URL(req.url);
   const id = (await params).id;
 
   if (id) {

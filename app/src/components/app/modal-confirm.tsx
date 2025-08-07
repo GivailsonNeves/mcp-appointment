@@ -6,7 +6,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useModal } from "@/providers/modal-provider";
 import { Button } from "../ui/button";
 
 type Props = {
@@ -17,9 +16,8 @@ type Props = {
 };
 
 export function ModalConfirm({ onClose, title, description, data }: Props) {
-  const { loading } = useModal();
   return (
-    <Dialog open={true} onOpenChange={(_) => onClose(false)}>
+    <Dialog open={true} onOpenChange={() => onClose(false)}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title ? title : "Add Patient"}</DialogTitle>

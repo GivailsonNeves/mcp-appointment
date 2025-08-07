@@ -1,9 +1,9 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { registerAppointmentTemplateResources } from "./appointment-templates.js";
-import { registerScheduleTemplateResources } from "./schedule-templates.js";
-import { registerDoctorProfileResources } from "./doctor-profiles.js";
-import { registerPatientHistoryResources } from "./patient-history.js";
-import { registerSystemResources } from "./system-resources.js";
+import { registerAppointmentTemplateResources } from "./appointment-templates";
+import { registerScheduleTemplateResources } from "./schedule-templates";
+import { registerDoctorProfileResources } from "./doctor-profiles";
+import { registerPatientHistoryResources } from "./patient-history";
+import { registerSystemResources } from "./system-resources";
 
 /**
  * Registers all MCP resources for the appointment system

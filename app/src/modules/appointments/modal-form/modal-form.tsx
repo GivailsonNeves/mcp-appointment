@@ -6,19 +6,35 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { FormData } from "../form";
+import { FormData, FormType } from "../form";
 import { useModal } from "@/providers/modal-provider";
+import { useEffect, useState } from "react";
+import { PatientType } from "@/types/patient";
+import { getPatientByIdAction } from "../actions";
 
 type Props = {
   onSubmit: Parameters<typeof FormData>[0]["onSubmit"];
-  data?: Parameters<typeof FormData>[0]["data"];
+  data?: FormType & { id?: number; patient?: PatientType };
   onClose: () => void;
 };
 
 export function ModalForm({ onSubmit, onClose, data }: Props) {
   const { loading } = useModal();
+  const [patient, setPatient] = useState<PatientType>();
+
+  useEffect(() => {
+    async function getPatient() {
+      if (data?.patientId) {
+        const response = await getPatientByIdAction(data.patientId);
+        setPatient(response);
+      }
+    }
+
+    getPatient();
+  }, [data?.patientId]);
+
   return (
-    <Dialog open={true} onOpenChange={(_) => onClose()}>
+    <Dialog open={true} onOpenChange={() => onClose()}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
@@ -27,9 +43,8 @@ export function ModalForm({ onSubmit, onClose, data }: Props) {
           <DialogDescription>
             {data ? (
               <>
-                Update the fields of the appointment <strong>{
-                  //@ts-ignore
-                (data).patient.name}</strong>
+                Update the fields of the appointment
+                <strong>{patient?.name}</strong>
               </>
             ) : (
               "Fill in the appointment fields"

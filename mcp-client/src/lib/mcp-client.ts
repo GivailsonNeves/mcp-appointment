@@ -52,9 +52,9 @@ export class MCPClient {
     },
   ];
 
-  constructor(apiKey: string) {
+  constructor(apiKey?: string) {
     this.llm = new Anthropic({
-      apiKey,
+      apiKey: apiKey || process.env.ANTHROPIC_API_KEY,
     });
     this.mcp = new Client({ name: "mcp-client-cli", version: "1.0.0" });
   }
@@ -96,7 +96,15 @@ export class MCPClient {
     }
   }
 
-  async processQuery(query: string, history: MessageParam[] = []) {
+  async processQuery(
+    query: string,
+    history: MessageParam[] = [],
+    apiKey?: string
+  ) {
+    if (apiKey) {
+      this.llm = new Anthropic({ apiKey });
+    }
+
     let conversation: MessageParam[] = [
       {
         role: MessageRole.User,
